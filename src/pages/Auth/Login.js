@@ -24,7 +24,7 @@ const Login = () => {
     onSubmit: (values) => {
       const { email, password } = values;
       if (email === "someone@gmail.com" && password === "12345678") {
-        navigate('/dashboard');
+        navigate('/');
         setTimeout(()=>{
 window.location.reload();
         },1000)
