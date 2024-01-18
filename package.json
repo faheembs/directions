@@ -7,7 +7,9 @@
     "start-local-deck-src": "webpack-dev-server --mode development --env.es6 --env.deck_src --progress --hot --open",
     "start-local-loaders-src": "webpack-dev-server --mode development --env.es6 --env.loaders_src --progress --hot --open",
     "start-local-hubble-src": "webpack-dev-server --mode development --env.es6 --env.hubble_src --progress --hot --open",
-    "start-local-https": "webpack-dev-server --mode development --https --env.es6 --progress --hot --open"
+    "start-local-https": "webpack-dev-server --mode development --https --env.es6 --progress --hot --open",
+    "build": "webpack --mode production",
+    "serve": "webpack serve --mode production"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.1.2",
@@ -57,6 +59,7 @@
     "@babel/preset-react": "^7.12.1",
     "@babel/preset-typescript": "^7.16.7",
     "babel-loader": "^8.0.0",
+    "html-webpack-plugin": "^4.0.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
     "webpack-dev-middleware": "^3.5.1",

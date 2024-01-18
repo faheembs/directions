@@ -8,6 +8,7 @@
 const resolve = require('path').resolve;
 const join = require('path').join;
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // const WEBPACK_ENV_VARIABLES = require('./webpack/shared-webpack-configuration')
 //   .WEBPACK_ENV_VARIABLES;
@@ -60,8 +61,17 @@ const CONFIG = {
 
   // to support browser history api and remove the '#' sign
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    contentBase: "./build",
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: resolve(__dirname,'./index.html'),
+    }),
+  ],
+  optimization: {
+    minimize: false
+}
 
   // Optional: Enables reading mapbox and dropbox client token from environment variable
   // plugins: [new webpack.EnvironmentPlugin(WEBPACK_ENV_VARIABLES)]
