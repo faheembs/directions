@@ -20,13 +20,14 @@ import {
 import { loadCloudMap, addDataToMap, addNotification, replaceDataInMap } from '@kepler.gl/actions';
 import { CLOUD_PROVIDERS } from './cloud-providers';
 import sampleTripData, { testCsvData, sampleTripDataConfig } from './data/sample-trip-data';
-// import sampleGeojson from './data/sample-small-geojson';
-// import sampleGeojsonPoints from './data/sample-geojson-points';
-// import sampleGeojsonConfig from './data/sample-geojson-config';
+import sampleGeojson from './data/sample-small-geojson';
+import sampleGeojsonPoints from './data/sample-geojson-points';
+import sampleGeojsonConfig from './data/sample-geojson-config';
 import sampleH3Data, { config as h3MapConfig } from './data/sample-hex-id-csv';
 import sampleS2Data, { config as s2MapConfig, dataId as s2DataId } from './data/sample-s2-data';
 import sampleAnimateTrip, { animateTripDataId } from './data/sample-animate-trip-data';
 import sampleIconCsv, { config as savedMapConfig } from './data/sample-icon-csv';
+import directionSample , {config as directionConfig} from './data/directionSample';
 import sampleGpsData from './data/sample-gps-data';
 import { processCsvData, processGeojson } from '@kepler.gl/processors';
 import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
@@ -120,6 +121,7 @@ const App = (props) => {
     if (query.mapUrl) {
       dispatch(loadRemoteMap({ dataUrl: query.mapUrl }));
     }
+    loadSampleData();
   }, []);
 
   const hideBanner = () => {
@@ -156,6 +158,8 @@ const App = (props) => {
   const loadSampleData = () => {
     loadPointData();
     loadGeojsonData();
+    // loadDirectionData();
+    loadS2Data();
   };
 
   const loadPointData = () => {
@@ -242,7 +246,7 @@ const App = (props) => {
   const replaceData = () => {
     const sliceData = processGeojson({
       type: 'FeatureCollection',
-      // features: sampleGeojsonPoints.features.slice(0, 5)
+      features: sampleGeojsonPoints.features.slice(0, 5)
     });
     loadGeojsonData();
     window.setTimeout(() => {
@@ -258,23 +262,24 @@ const App = (props) => {
     }, 1000);
   };
 
+  
   const loadGeojsonData = () => {
     dispatch(
       addDataToMap({
         datasets: [
           {
             info: { label: 'Bart Stops Geo', id: 'bart-stops-geo' },
-            // data: processGeojson(sampleGeojsonPoints)
+            data: processGeojson(sampleGeojsonPoints)
           },
           {
             info: { label: 'SF Zip Geo', id: 'sf-zip-geo' },
-            // data: processGeojson(sampleGeojson)
+            data: processGeojson(sampleGeojson)
           }
         ],
         options: {
           keepExistingConfig: true
         },
-        // config: sampleGeojsonConfig
+        config: sampleGeojsonConfig
       })
     );
   };

@@ -6,14 +6,14 @@ and segments both use queryRunner */
 import keyMirror from 'keymirror';
 
 export const ASSETS_URL = 'https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/';
-// export const DATA_URL = 'https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/';
-export const DATA_URL = './src/data/';
+export const DATA_URL = 'https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/';
+// export const DATA_URL = './src/data/';
 export const MAP_URI = 'demo/map?mapUrl=';
 /*
  * If you want to add more samples, feel free to edit the json file on github kepler.gl data repo
  */
-// export const MAP_CONFIG_URL = `${DATA_URL}samples.json?nocache=${new Date().getTime()}`;
-export const MAP_CONFIG_URL = `${DATA_URL}directionSample.json`;
+export const MAP_CONFIG_URL = `${DATA_URL}samples.json?nocache=${new Date().getTime()}`;
+// export const MAP_CONFIG_URL = `${DATA_URL}sample-gps-data.js`;
 
 /**
  * I know this is already defined in Kepler core but it should be defined here

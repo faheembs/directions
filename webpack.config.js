@@ -7,6 +7,7 @@
 // avoid destructuring for older Node version support
 const resolve = require('path').resolve;
 const join = require('path').join;
+const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -66,8 +67,18 @@ const CONFIG = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(__dirname,'./index.html'),
+      filename:'index.html',
+      inject: true,
+      template: resolve(__dirname,'index.html'),
     }),
+    new CopyPlugin(
+ [
+        {
+          from: resolve(__dirname, 'src/assets/images'),
+          to: resolve(__dirname, 'build')
+        }
+      ]
+    ),
   ],
   optimization: {
     minimize: false

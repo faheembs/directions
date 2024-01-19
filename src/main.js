@@ -24,9 +24,9 @@ const Root = () => (
     <Router history={history}>
       <Route path="/login" component={Login} exact/>
       <Route path="/register" component={Signup} exact/>
-      <Route path="/" component={App} />
-        {/* {appRoute} */}
-      {/* </Route> */}
+      <Route path="/" component={App} >
+        {appRoute}
+      </Route>
     </Router>
   </BrowserRouter>
   </Provider>
