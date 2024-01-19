@@ -156,10 +156,10 @@ const App = (props) => {
   };
 
   const loadSampleData = () => {
-    loadPointData();
-    loadGeojsonData();
+    // loadPointData();
+    // loadGeojsonData();
     // loadDirectionData();
-    loadS2Data();
+    // loadS2Data();
   };
 
   const loadPointData = () => {
