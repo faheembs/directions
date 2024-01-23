@@ -8,7 +8,7 @@
         "detail": "The yellow and green taxi trip records include fields capturing pick-up and drop-off dates/times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types, and driver-reported passenger counts. Data is downloaded from [NYC Taxi and Limousine Commission (TLC)](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) website.",
         "size": 97986,
         "visible": true,
-        "dataUrl": "https://firebasestorage.googleapis.com/v0/b/kepler-16ba9.appspot.com/o/data.csv?alt=media&token=7a7fb634-2016-4731-bf7b-bab02fcf678e",
-        "configUrl": "https://firebasestorage.googleapis.com/v0/b/kepler-16ba9.appspot.com/o/config.json?alt=media&token=99faa055-5a77-40c7-9a0a-7317e6bd5826"
+        "dataUrl": "https://raw.githubusercontent.com/faheembs/directions/main/src/data/data.csv",
+        "configUrl": "https://raw.githubusercontent.com/faheembs/directions/main/src/data/config.json"
     }
 ]
