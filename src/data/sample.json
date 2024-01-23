@@ -3,12 +3,12 @@
         "id": "directionsSample1",
         "label": "Directions' Sample",
         "queryType": "sample",
-        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/nyctrips.png",
-        "description": "A small sample of yellow and green taxi trip records in New York City.",
-        "detail": "The yellow and green taxi trip records include fields capturing pick-up and drop-off dates/times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types, and driver-reported passenger counts. Data is downloaded from [NYC Taxi and Limousine Commission (TLC)](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) website.",
-        "size": 97986,
+        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/sfcontour.png",
+        "description": "Elevation contours of San Francisco mainland and Treasure Island/Yerba Island.",
+        "detail": "This dataset contains elevation contours for San Francisco mainland and Treasure Island/Yerba Island. Based on San Francisco Elevation Datum. Data source: [DataSF](https://data.sfgov.org/City-Infrastructure/Street-Tree-List/tkzw-k3nq/data).",
+        "size": 13598,
         "visible": true,
-        "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/nyctrips/data.csv",
-        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/nyctrips/config.json"
+        "dataUrl": "https://raw.githubusercontent.com/faheembs/directions/main/src/data/data.json",
+        "configUrl": "https://raw.githubusercontent.com/faheembs/directions/main/src/data/config.json"
     }
 ]
