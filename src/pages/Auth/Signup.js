@@ -5,11 +5,13 @@ import logo from '../../assets/Slide1.png';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import animation from '../../assets/animation2.mov'
+
 
 const Signup = () => {
 
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -34,7 +36,11 @@ const Signup = () => {
 
   return (
     <Box sx={styles.authContainer}>
-      <Card elevation={6}>
+      <video autoPlay muted loop style={{ position: 'absolute', width: '113%', height: '113%', objectFit: 'cover' }}>
+        <source src={animation} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <Card elevation={6} sx={{ zIndex: 1000 }}>
         <Box sx={{ width: "469.21px", mt: 2 }}>
           <Grid align="center" pb={2}>
             <Link href='/'> <img src={logo} height={120} width={320} style={{ objectFit: 'cover' }} alt="App Logo" /> </Link>
@@ -112,7 +118,7 @@ const Signup = () => {
                     mb: 2,
                     textTransform: 'none'
                   }}
-                  onClick={navigate('/')}
+                  onClick={navigate('/directions')}
                 >
                   Signup
                 </Button>

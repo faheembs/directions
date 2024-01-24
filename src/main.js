@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import document from 'global/document';
 import { Provider } from 'react-redux';
-import { browserHistory, Router, Route } from 'react-router';
+import { browserHistory, Router, Route, Redirect } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import store from './store';
 import App from './app';
@@ -22,7 +22,8 @@ const Root = () => (
   <Provider store={store}>
     <BrowserRouter>
       <Router history={history}>
-        <Route path="/" component={Login} exact />
+        <Route path="/login" component={Login} exact />
+        <Redirect from="/" to="/login" />
         <Route path="/register" component={Signup} />
         <Route path="/directions" component={App} >
           {appRoute}

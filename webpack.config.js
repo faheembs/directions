@@ -39,6 +39,18 @@ const CONFIG = {
         include: [join(__dirname, 'src')],
         exclude: [/node_modules/]
       },
+      {
+        test: /\.mov$/,
+        use: [
+          {
+            loader: 'file-loader',
+            // options: {
+            //   name: '[name].[ext]',
+            //   outputPath: 'videos/', // Output folder for videos
+            // },
+          },
+        ],
+      },
       // fix for arrow-related errors
       {
         test: /\.mjs$/,
@@ -67,22 +79,14 @@ const CONFIG = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename:'index.html',
+      filename: 'index.html',
       inject: true,
-      template: resolve(__dirname,'index.html'),
+      template: resolve(__dirname, 'index.html'),
     }),
-    new CopyPlugin(
- [
-        {
-          from: resolve(__dirname, 'src/assets/images'),
-          to: resolve(__dirname, 'build')
-        }
-      ]
-    ),
   ],
   optimization: {
     minimize: false
-}
+  }
 
   // Optional: Enables reading mapbox and dropbox client token from environment variable
   // plugins: [new webpack.EnvironmentPlugin(WEBPACK_ENV_VARIABLES)]
