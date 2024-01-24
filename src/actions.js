@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
 // Copyright contributors to the kepler.gl project
 
-import {push} from 'react-router-redux';
-import {request, text as requestText, json as requestJson} from 'd3-request';
-import {loadFiles, toggleModal} from '@kepler.gl/actions';
-import {load} from '@loaders.gl/core';
-import {CSVLoader} from '@loaders.gl/csv';
-import {ArrowLoader} from '@loaders.gl/arrow';
-import {_GeoJSONLoader as GeoJSONLoader} from '@loaders.gl/json';
+import { push } from 'react-router-redux';
+import { request, text as requestText, json as requestJson } from 'd3-request';
+import { loadFiles, toggleModal } from '@kepler.gl/actions';
+import { load } from '@loaders.gl/core';
+import { CSVLoader } from '@loaders.gl/csv';
+import { ArrowLoader } from '@loaders.gl/arrow';
+import { _GeoJSONLoader as GeoJSONLoader } from '@loaders.gl/json';
 
 import {
   LOADING_SAMPLE_ERROR_MESSAGE,
   LOADING_SAMPLE_LIST_ERROR_MESSAGE,
   MAP_CONFIG_URL
 } from './constants/default-settings';
-import {parseUri} from './utils/url';
+import { parseUri } from './utils/url';
 
 // CONSTANTS
 export const INIT = 'INIT';
@@ -72,7 +72,7 @@ export function setLoadingMapStatus(isMapLoading) {
  *
  * @param {*} param0
  */
-export function onExportFileSuccess({response = {}, provider, options}) {
+export function onExportFileSuccess({ response = {}, provider, options }) {
   return dispatch => {
     // if isPublic is true, use share Url
     if (options.isPublic && provider.getShareUrl) {
@@ -84,7 +84,7 @@ export function onExportFileSuccess({response = {}, provider, options}) {
   };
 }
 
-export function onLoadCloudMapSuccess({provider, loadParams}) {
+export function onLoadCloudMapSuccess({ provider, loadParams }) {
   return dispatch => {
     const mapUrl = provider?.getMapUrl(loadParams);
     if (mapUrl) {
@@ -125,15 +125,15 @@ export function loadRemoteMap(options) {
       // In this part we turn the response into a FileBlob
       // so we can use it to call loadFiles
       ([file, url]) => {
-        const {file: filename} = parseUri(url);
+        const { file: filename } = parseUri(url);
         dispatch(loadFiles([new File([file], filename)])).then(() =>
           dispatch(setLoadingMapStatus(false))
         );
       },
       error => {
-        const {target = {}} = error;
-        const {status, responseText} = target;
-        dispatch(loadRemoteResourceError({status, message: responseText}, options.dataUrl));
+        const { target = {} } = error;
+        const { status, responseText } = target;
+        dispatch(loadRemoteResourceError({ status, message: responseText }, options.dataUrl));
       }
     );
   };
@@ -183,13 +183,14 @@ function loadRemoteRawData(url) {
  */
 export function loadSample(options, pushRoute = true) {
   return (dispatch, getState) => {
-    const {routing} = getState();
+    const { routing } = getState();
     if (options.id && pushRoute) {
+
       dispatch(push(`/demo/${options.id}${routing.locationBeforeTransitions?.search ?? ''}`));
     }
     // if the sample has a kepler.gl config file url we load it
     if (options.keplergl) {
-      dispatch(loadRemoteMap({dataUrl: options.keplergl}));
+      dispatch(loadRemoteMap({ dataUrl: options.keplergl }));
     } else {
       dispatch(loadRemoteSampleMap(options));
     }
@@ -206,18 +207,20 @@ export function loadSample(options, pushRoute = true) {
 function loadRemoteSampleMap(options) {
   return dispatch => {
     // Load configuration first
-    const {configUrl, dataUrl} = options;
+    const { configUrl, dataUrl } = options;
 
     Promise.all([loadRemoteConfig(configUrl), loadRemoteData(dataUrl)]).then(
       ([config, data]) => {
         // TODO: these two actions can be merged
+        console.log("config", config, data)
+        console.log("options", options)
         dispatch(loadRemoteResourceSuccess(data, config, options));
         dispatch(toggleModal(null));
       },
       error => {
         if (error) {
-          const {target = {}} = error;
-          const {status, responseText} = target;
+          const { target = {} } = error;
+          const { status, responseText } = target;
           dispatch(
             loadRemoteResourceError(
               {
@@ -303,11 +306,11 @@ export function loadSampleConfigurations(sampleMapId = null) {
   return dispatch => {
     requestJson(MAP_CONFIG_URL, (error, samples) => {
       if (error) {
-        const {target = {}} = error;
-        const {status, responseText} = target;
+        const { target = {} } = error;
+        const { status, responseText } = target;
         dispatch(
           loadRemoteResourceError(
-            {status, message: `${responseText} - ${LOADING_SAMPLE_LIST_ERROR_MESSAGE}`},
+            { status, message: `${responseText} - ${LOADING_SAMPLE_LIST_ERROR_MESSAGE}` },
             MAP_CONFIG_URL
           )
         );

@@ -6,14 +6,14 @@ and segments both use queryRunner */
 import keyMirror from 'keymirror';
 
 export const ASSETS_URL = 'https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/';
-export const DATA_URL = 'https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/';
-// export const DATA_URL = './src/data/';
+// export const DATA_URL = 'https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/';
+// export const DATA_URL = '../data';
 export const MAP_URI = 'demo/map?mapUrl=';
 /*
  * If you want to add more samples, feel free to edit the json file on github kepler.gl data repo
  */
-export const MAP_CONFIG_URL = `${DATA_URL}samples.json?nocache=${new Date().getTime()}`;
-// export const MAP_CONFIG_URL = `${DATA_URL}sample-gps-data.js`;
+// export const MAP_CONFIG_URL = `${DATA_URL}samples.json?nocache=${new Date().getTime()}`;
+export const MAP_CONFIG_URL = 'https://raw.githubusercontent.com/faheembs/directions/main/src/data/sample.json';
 
 /**
  * I know this is already defined in Kepler core but it should be defined here
@@ -25,7 +25,7 @@ export const KEPLER_GL_WEBSITE = 'http://kepler.gl/';
 export const QUERY_TYPES = keyMirror({
   file: null,
   sample: null,
-  directions:null
+  directions: null
 });
 
 export const QUERY_OPTIONS = keyMirror({
@@ -36,13 +36,12 @@ export const QUERY_OPTIONS = keyMirror({
 export const LOADING_METHODS = keyMirror({
   remote: null,
   sample: null,
-  directions:null
+  directions: null
 });
 
 export const LOADING_SAMPLE_LIST_ERROR_MESSAGE = 'Not able to load sample gallery';
 export const LOADING_SAMPLE_ERROR_MESSAGE = 'Not able to load sample';
 export const CORS_LINK = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS';
-
 export const DEFAULT_FEATURE_FLAGS = {
   cloudStorage: true
 };

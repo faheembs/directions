@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Copyright contributors to the kepler.gl project
 
-import {combineReducers} from 'redux';
-import {handleActions} from 'redux-actions';
+import { combineReducers } from 'redux';
+import { handleActions } from 'redux-actions';
 
-import keplerGlReducer, {combinedUpdaters, uiStateUpdaters} from '@kepler.gl/reducers';
-import {processGeojson, processRowObject, processArrowTable} from '@kepler.gl/processors';
+import keplerGlReducer, { combinedUpdaters, uiStateUpdaters } from '@kepler.gl/reducers';
+import { processGeojson, processRowObject, processArrowTable } from '@kepler.gl/processors';
 import KeplerGlSchema from '@kepler.gl/schemas';
-import {EXPORT_MAP_FORMATS} from '@kepler.gl/constants';
+import { EXPORT_MAP_FORMATS } from '@kepler.gl/constants';
 
 import {
   INIT,
@@ -17,8 +17,8 @@ import {
   SET_SAMPLE_LOADING_STATUS
 } from '../actions';
 
-import {CLOUD_PROVIDERS_CONFIGURATION} from '../constants/default-settings';
-import {generateHashId} from '../utils/strings';
+import { CLOUD_PROVIDERS_CONFIGURATION } from '../constants/default-settings';
+import { generateHashId } from '../utils/strings';
 
 // INITIAL_APP_STATE
 const initialAppState = {
@@ -52,7 +52,7 @@ export const appReducer = handleActions(
   initialAppState
 );
 
-const {DEFAULT_EXPORT_MAP} = uiStateUpdaters;
+const { DEFAULT_EXPORT_MAP } = uiStateUpdaters;
 
 // combine app reducer and keplerGl reducer
 // to mimic the reducer state of kepler.gl website
@@ -89,7 +89,7 @@ const demoReducer = combineReducers({
 export const loadRemoteResourceSuccess = (state, action) => {
   // TODO: replace generate with a different function
   const datasetId = action.options.id || generateHashId(6);
-  const {dataUrl} = action.options;
+  const { dataUrl } = action.options;
   let processorMethod = processRowObject;
   // TODO: create helper to determine file ext eligibility
   if (dataUrl.includes('.json') || dataUrl.includes('.geojson')) {
@@ -135,7 +135,7 @@ export const loadRemoteResourceSuccess = (state, action) => {
 };
 
 export const loadRemoteResourceError = (state, action) => {
-  const {error, url} = action;
+  const { error, url } = action;
 
   const errorNote = {
     type: 'error',
@@ -169,6 +169,7 @@ const composedReducer = (state, action) => {
   if (composedUpdaters[action.type]) {
     return composedUpdaters[action.type](state, action);
   }
+  // console.log("state", state, "----------actions---------", action)
   return demoReducer(state, action);
 };
 

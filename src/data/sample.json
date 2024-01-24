@@ -14,30 +14,15 @@
         "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/world_flights/config_soei4h.json"
       },
     {
-        "id": "directionsSample2",
+        "id": "directionsSampleNycTrips",
         "label": "Directions' Sample",
         "queryType": "sample",
-        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/sfcontour.png",
-        "description": "Elevation contours of San Francisco mainland and Treasure Island/Yerba Island.",
-        "detail": "This dataset contains elevation contours for San Francisco mainland and Treasure Island/Yerba Island. Based on San Francisco Elevation Datum. Data source: [DataSF](https://data.sfgov.org/City-Infrastructure/Street-Tree-List/tkzw-k3nq/data).",
-        "size": 13598,
+        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/nyctrips.png",
+        "description": "A small sample of yellow and green taxi trip records in New York City.",
+        "detail": "The yellow and green taxi trip records include fields capturing pick-up and drop-off dates/times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types, and driver-reported passenger counts. Data is downloaded from [NYC Taxi and Limousine Commission (TLC)](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) website.",
+        "size": 96986,
         "visible": true,
-        "isPremium": false,
-        "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/sfcontour/data.json",
-        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/sfcontour/config.json"
-    },
-      {
-        "id": "directionsSample3",
-        "label": "Travel Times From Uber Movement",
-        "queryType": "sample",
-        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/movement-pittsburgh.png",
-        "description": "Pittsburgh travel times before and during heavy inclement weather conditions",
-        "detail": "Uber Movement provides free and public access to travel times data derived from billions of Uber trips. Data is available under a Creative Commons Noncommercial Attribution License. Data source: [Uber Movement](https://movement.uber.com)",
-        "size": 793,
-        "visible": true,
-        "isPremium": true,
-        "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/data.csv",
-        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/config.json"
-  }
-   
+        "dataUrl": "https://raw.githubusercontent.com/faheembs/directions/main/src/data/data.csv",
+        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/nyctrips/config.json"
+    }
 ]

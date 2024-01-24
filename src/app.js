@@ -27,7 +27,7 @@ import sampleH3Data, { config as h3MapConfig } from './data/sample-hex-id-csv';
 import sampleS2Data, { config as s2MapConfig, dataId as s2DataId } from './data/sample-s2-data';
 import sampleAnimateTrip, { animateTripDataId } from './data/sample-animate-trip-data';
 import sampleIconCsv, { config as savedMapConfig } from './data/sample-icon-csv';
-import directionSample , {config as directionConfig} from './data/directionSample';
+// import directionSample, { config as directionConfig } from './data/directionSample';
 import sampleGpsData from './data/sample-gps-data';
 import { processCsvData, processGeojson } from '@kepler.gl/processors';
 import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
@@ -36,7 +36,7 @@ import logo from './assets/Slide1.png'
 
 const CustomHeader = () => (
   <div>
-    <img src={logo} width={220} height={80} style={{ objectFit: 'cover',marginLeft:'30px' }} />
+    <img src={logo} style={{ objectFit: 'contain', width: '300px', height: '110px' }} />
   </div>
 );
 
@@ -90,12 +90,12 @@ const App = (props) => {
   const [showBanner, setShowBanner] = useState(false);
   const KeplerGl = injectComponents(
     [
-    replaceLoadDataModal(),
-    replaceMapControl(),
-    replacePanelHeader(),
-    [ PanelHeaderFactory, myCustomHeaderFactory]
-  ], 
-  
+      replaceLoadDataModal(),
+      replaceMapControl(),
+      replacePanelHeader(),
+      [PanelHeaderFactory, myCustomHeaderFactory]
+    ],
+
   );
 
 
@@ -262,7 +262,7 @@ const App = (props) => {
     }, 1000);
   };
 
-  
+
   const loadGeojsonData = () => {
     dispatch(
       addDataToMap({
@@ -366,33 +366,33 @@ const App = (props) => {
           node ? (root = node) : null;
         }}
       > */}
-        <Banner
-          show={showBanner}
-          height={BannerHeight}
-          bgColor="#2E7CF6"
-          onClose={hideBanner}
-        >
-          <Announcement onDisable={disableBanner} />
-        </Banner>
-        <div style={CONTAINER_STYLE}>
-          <AutoSizer>
-            {({ height, width }) => (
-              <KeplerGl
-                mapboxApiAccessToken='pk.eyJ1IjoicmFuYWFtbWFyciIsImEiOiJjbHI0eHZudjIxbHRqMml0MzR2Y2w2c3NrIn0.nbMrBleZxpEGERoeeb3Arg'
-                id="map"
-                getState={keplerGlGetState}
-                width={width}
-                height={height}
-                cloudProviders={CLOUD_PROVIDERS}
-                localeMessages={messages}
-                onExportToCloudSuccess={onExportFileSuccess}
-                onLoadCloudMapSuccess={onLoadCloudMapSuccess}
-                featureFlags={DEFAULT_FEATURE_FLAGS}
-                theme="light"
-              />
-            )}
-          </AutoSizer>
-        </div>
+      <Banner
+        show={showBanner}
+        height={BannerHeight}
+        bgColor="#2E7CF6"
+        onClose={hideBanner}
+      >
+        <Announcement onDisable={disableBanner} />
+      </Banner>
+      <div style={CONTAINER_STYLE}>
+        <AutoSizer>
+          {({ height, width }) => (
+            <KeplerGl
+              mapboxApiAccessToken='pk.eyJ1IjoicmFuYWFtbWFyciIsImEiOiJjbHI0eHZudjIxbHRqMml0MzR2Y2w2c3NrIn0.nbMrBleZxpEGERoeeb3Arg'
+              id="map"
+              getState={keplerGlGetState}
+              width={width}
+              height={height}
+              // cloudProviders={CLOUD_PROVIDERS}
+              localeMessages={messages}
+              onExportToCloudSuccess={onExportFileSuccess}
+              onLoadCloudMapSuccess={onLoadCloudMapSuccess}
+              featureFlags={DEFAULT_FEATURE_FLAGS}
+              theme="light"
+            />
+          )}
+        </AutoSizer>
+      </div>
       {/* </GlobalStyle> */}
     </ThemeProvider>
   );

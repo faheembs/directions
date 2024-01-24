@@ -29,7 +29,7 @@ const CustomLoadDataModalFactory = (...deps) => {
       label: 'modal.loadData.directions',
       elementType: SampleMapGallery,
       // tabElementType: SampleMapsTab
-      
+
 
     }
   };

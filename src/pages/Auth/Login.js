@@ -24,10 +24,10 @@ const Login = () => {
     onSubmit: (values) => {
       const { email, password } = values;
       if (email === "someone@gmail.com" && password === "12345678") {
-        navigate('/');
-        setTimeout(()=>{
-window.location.reload();
-        },1000)
+        navigate('/directions');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
       } else {
         setErrorMessage("Invalid email or password");
       }
@@ -42,7 +42,7 @@ window.location.reload();
             <Link href='/'> <img src={logo} height={120} width={320} style={{ objectFit: 'cover' }} alt="App Logo" /> </Link>
           </Grid>
           {errorMessage && (
-            <Alert sx={{mx:4}} severity="error" >{errorMessage}</Alert>
+            <Alert sx={{ mx: 4 }} severity="error" >{errorMessage}</Alert>
           )}
           <form onSubmit={formik.handleSubmit}>
             <Box px={4} my={4}>
@@ -87,22 +87,22 @@ window.location.reload();
             </Box>
             <Box px={2}>
               <Box sx={styles.buttonAlignment}>
-             
+
                 <Button
                   type="submit"
                   variant="contained"
                   size="large"
                   sx={{
-                      borderRadius: "45.69px",
-                      py: 1, px: 8,
-                      mb: 2,
-                      textTransform: 'none'
-                    }}
-                    onClick={formik.handleSubmit}
-                    >
+                    borderRadius: "45.69px",
+                    py: 1, px: 8,
+                    mb: 2,
+                    textTransform: 'none'
+                  }}
+                  onClick={formik.handleSubmit}
+                >
                   Login
                 </Button>
-             
+
                 <Link href="#" underline="hover">Forgot your password?</Link>
               </Box>
               <Box sx={styles.navigateToSignup}>
