@@ -1,6 +1,20 @@
 [
+
+      {
+        "id": "directionsSample_Flights",
+        "label": "All the Flights in the World",
+        "queryType": "sample",
+        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/world_flight_s.png",
+        "description": "Two hours of flight data collected by OpenSky Network on September 3rd 2019",
+        "detail": "The dataset contains two hours of flight data collected using the live API of [OpenSky Network](https://opensky-network.org). The color of the flights is based on country of origin. 18 thousands flights are recorded during the two hour period. The path drops over the seas due to lack of satellite coverage. Airline info is added to each flight by joining with data from [airlinecodes.co.uk](http://www.airlinecodes.co.uk/callsignres.asp?callsign=&submit=Submit)",
+        "size": 12938,
+        "visible": true,
+        "isPremium": false,
+        "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/world_flights/world_flights_soei4h.json",
+        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/world_flights/config_soei4h.json"
+      },
     {
-        "id": "directionsSample1",
+        "id": "directionsSample2",
         "label": "Directions' Sample",
         "queryType": "sample",
         "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/sfcontour.png",
@@ -13,16 +27,17 @@
         "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/sfcontour/config.json"
     },
       {
-    "id": "directionsSample2",
-    "label": "Travel Times From Uber Movement",
-    "queryType": "sample",
-    "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/movement-pittsburgh.png",
-    "description": "Pittsburgh travel times before and during heavy inclement weather conditions",
-    "detail": "Uber Movement provides free and public access to travel times data derived from billions of Uber trips. Data is available under a Creative Commons Noncommercial Attribution License. Data source: [Uber Movement](https://movement.uber.com)",
-    "size": 793,
-    "visible": true,
-    "isPremium": false,
-    "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/data.csv",
-    "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/config.json"
+        "id": "directionsSample3",
+        "label": "Travel Times From Uber Movement",
+        "queryType": "sample",
+        "imageUrl": "https://s3.amazonaws.com/uber-static/kepler.gl/sample/movement-pittsburgh.png",
+        "description": "Pittsburgh travel times before and during heavy inclement weather conditions",
+        "detail": "Uber Movement provides free and public access to travel times data derived from billions of Uber trips. Data is available under a Creative Commons Noncommercial Attribution License. Data source: [Uber Movement](https://movement.uber.com)",
+        "size": 793,
+        "visible": true,
+        "isPremium": false,
+        "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/data.csv",
+        "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/config.json"
   }
+   
 ]
