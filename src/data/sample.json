@@ -22,7 +22,7 @@
         "detail": "This dataset contains elevation contours for San Francisco mainland and Treasure Island/Yerba Island. Based on San Francisco Elevation Datum. Data source: [DataSF](https://data.sfgov.org/City-Infrastructure/Street-Tree-List/tkzw-k3nq/data).",
         "size": 13598,
         "visible": true,
-        "isPremium": true,
+        "isPremium": false,
         "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/sfcontour/data.json",
         "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/sfcontour/config.json"
     },
@@ -35,7 +35,7 @@
         "detail": "Uber Movement provides free and public access to travel times data derived from billions of Uber trips. Data is available under a Creative Commons Noncommercial Attribution License. Data source: [Uber Movement](https://movement.uber.com)",
         "size": 793,
         "visible": true,
-        "isPremium": false,
+        "isPremium": true,
         "dataUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/data.csv",
         "configUrl": "https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/movement_pittsburgh/config.json"
   }
