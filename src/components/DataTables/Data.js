@@ -1,7 +1,5 @@
-import React from 'react'
-import { Box, Button, IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from 'react'
+import { Box, Button, Menu, MenuItem } from '@mui/material';
 
 
 
@@ -53,43 +51,62 @@ export const datasetColumns = [
   { field: "id", headerName: "ID", width: 150 },
   { field: "name", headerName: "Dataset Name", width: 150 },
   { field: "description", headerName: "Description", width: 150 },
-  { field: "status", headerName: "Status", width: 150, },
+  { field: "status", headerName: "Dataset Type", width: 150, },
   {
     field: "actions",
     headerName: "Actions",
     width: 200,
-    renderCell: (params) => (
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button
-          variant='outlined'
-          sx={{
-            color: 'blue', textTransform: 'none', mr: 1, "&:hover": {
-              backgroundColor: 'blue',
-              color: 'white',
-              borderColor: 'blue'
-            }
-          }}
-          onClick={() => handleEdit(params.row.id)}
-        >
-          Edit
-        </Button>
-        <Button
-          variant='outlined'
-          sx={{
-            color: 'red', textTransform: 'none', "&:hover": {
-              backgroundColor: 'red',
-              color: 'white',
-              borderColor: 'red',
-            },
-            borderColor: 'red'
-          }}
-          onClick={() => handleDelete(params.row.id)}
-        >
-          {/* <DeleteIcon sx={{ color: 'red', mr: 1 }} /> */}
-          Delete
-        </Button>
-      </Box>
-    ),
+    renderCell: (params) => {
+      const [anchorEl, setAnchorEl] = useState(null);
+
+      const handleEditClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+
+      const handleEditClose = () => {
+        setAnchorEl(null);
+      };
+
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            variant='outlined'
+            sx={{
+              color: 'blue', textTransform: 'none', mr: 1, "&:hover": {
+                backgroundColor: 'blue',
+                color: 'white',
+                borderColor: 'blue'
+              }
+            }}
+            onClick={handleEditClick}
+          >
+            Edit
+          </Button>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleEditClose}
+          >
+            <MenuItem onClick={() => handleEdit(params.row.id)}>Free</MenuItem>
+            <MenuItem onClick={() => handleEdit(params.row.id)}>Premium</MenuItem>
+          </Menu>
+          <Button
+            variant='outlined'
+            sx={{
+              color: 'red', textTransform: 'none', "&:hover": {
+                backgroundColor: 'red',
+                color: 'white',
+                borderColor: 'red',
+              },
+              borderColor: 'red'
+            }}
+            onClick={() => handleDelete(params.row.id)}
+          >
+            Delete
+          </Button>
+        </Box>
+      );
+    }
   },
 ];
 

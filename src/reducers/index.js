@@ -1,14 +1,9 @@
-// SPDX-License-Identifier: MIT
-// Copyright contributors to the kepler.gl project
-
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-
 import keplerGlReducer, { combinedUpdaters, uiStateUpdaters } from '@kepler.gl/reducers';
 import { processGeojson, processRowObject, processArrowTable } from '@kepler.gl/processors';
 import KeplerGlSchema from '@kepler.gl/schemas';
 import { EXPORT_MAP_FORMATS } from '@kepler.gl/constants';
-
 import {
   INIT,
   LOAD_MAP_SAMPLE_FILE,

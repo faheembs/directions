@@ -6,12 +6,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import animation from '../../assets/animation2.mov'
+import { useDispatch } from "react-redux";
+import { userRegister } from "../../features/Authentication/AuthActions";
 
 
 const Signup = () => {
 
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -28,9 +31,11 @@ const Signup = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-
-      console.log(values);
+    onSubmit: async (values) => {
+      dispatch(userRegister({ email: values.email, password: values.password }))
+      await navigate('/directions');
+      // console.log(values);
+      window.location.reload();
     },
   });
 
@@ -118,7 +123,7 @@ const Signup = () => {
                     mb: 2,
                     textTransform: 'none'
                   }}
-                  onClick={navigate('/directions')}
+                  onClick={formik.handleSubmit}
                 >
                   Signup
                 </Button>

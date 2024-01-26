@@ -6,10 +6,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import animation from '../../assets/animation2.mov'
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../features/Authentication/AuthActions";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -22,16 +25,17 @@ const Login = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const { email, password } = values;
-      if (email === "someone@gmail.com" && password === "12345678") {
-        navigate('/directions');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000)
-      } else {
-        setErrorMessage("Invalid email or password");
-      }
+
+      await dispatch(userLogin({ email: email, password: password }))
+      navigate('/directions');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000)
+
+
+
     },
   });
   return (

@@ -119,7 +119,7 @@ function Header({ screenName }) {
                                 <Box sx={{ pr: 1, mt: 1 }} >
                                     <AccountCircleIcon />
                                 </Box>
-                                {(users !== null) ? users.userFormData.name : "User"}
+
                             </Button>
                             <Menu
                                 anchorEl={anchorEl}
