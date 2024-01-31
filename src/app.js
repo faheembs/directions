@@ -32,13 +32,38 @@ import sampleGpsData from './data/sample-gps-data';
 import { processCsvData, processGeojson } from '@kepler.gl/processors';
 import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
 import logo from './assets/Slide1.png'
+import { Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 /* eslint-enable no-unused-vars */
 
-const CustomHeader = () => (
-  <div>
-    <img src={logo} style={{ objectFit: 'contain', width: '300px', height: '110px' }} />
-  </div>
-);
+const CustomHeader = () => {
+
+  const navigate = useNavigate()
+  const handleNaviagteToDashboard = () => {
+    navigate('/dashboard')
+    window.location.reload()
+  }
+  return (
+    <div>
+      <img src={logo} style={{ objectFit: 'contain', width: '300px', height: '110px' }} />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button variant='contained'
+          onClick={handleNaviagteToDashboard}
+          sx={{
+            textTransform: 'none', borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+              color: 'black',
+              backgroundColor: 'white',
+              borderColor: 'black',
+              borderRadius: 0,
+            },
+            borderRadius: 0,
+            mr: 2,
+            mb: 2
+          }}>Go to Dashboard</Button>
+      </Box>
+    </div>
+  );
+}
 
 const myCustomHeaderFactory = () => CustomHeader;
 

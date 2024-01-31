@@ -16,6 +16,8 @@ import { BrowserRouter } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Dashboard/profile/Profile';
 import DataTable from './components/DataTables/DataTable';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -37,6 +39,18 @@ const Root = () => (
           {appRoute}
         </Route>
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </BrowserRouter>
   </Provider>
 );

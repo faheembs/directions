@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Link, Menu, MenuItem, Typography } from "@mui/material";
+import { Avatar, Box, Button, IconButton, Link, Menu, MenuItem, Typography } from "@mui/material";
 import { styles } from "../../styles/styles";
 // import Speaker from "../assets/Speaker.png";
 import Arrow from "../../assets/Arrow.png";
@@ -10,7 +10,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 // import jsonRoutes from "../constants/routes.json"
 import { useDispatch } from "react-redux";
 // import { userLogout } from "../features/auth/authActions";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+function stringAvatar(name) {
+    return {
+        sx: {
+            bgcolor: "black",
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    };
+}
 
 function Header({ screenName }) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -32,13 +40,17 @@ function Header({ screenName }) {
 
     const handleProfileClick = () => {
         handleMenuClose();
-        navigate("/adminlayout/profile")
+        navigate("/dashboard/profile")
     };
 
     const handleLogoutClick = async () => {
         // await dispatch(userLogout());
         navigate('/login')
     };
+    const handlenavigateToMap = () => {
+        navigate('/directions')
+        window.location.reload()
+    }
     return (
         <>
             <Box
@@ -68,65 +80,35 @@ function Header({ screenName }) {
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-end",
                         alignItems: "center",
                         paddingTop: "10px",
                     }}
                 >
-                    <Box sx={styles.centerDiv}>
-                        <Box
-                            sx={{
-                                "@media (max-width: 915px)": {
-                                    display: "none",
-                                },
-                            }}
-                        >
-                            <img
-                                src={Arrow}
-                                style={{ width: "12px", padding: "0px 15px 0px 5px" }}
-                            />
-                        </Box>
-                        <Box>
-                            <Typography
-                                sx={{
-                                    fontWeight: 400,
-                                    fontSize: "15px",
-                                    "@media(max-width: 915px)": {
-                                        fontSize: "10px",
-                                    },
-                                }}
-                            >
-                                Dashboard
-                            </Typography>
-                        </Box>
-                    </Box>
                     <Box >
-                        <Box>
 
-                            <Button
+                        <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+
+                            <Typography variant='body1' sx={{ color: 'blue', textDecoration: 'underline' }} onClick={handlenavigateToMap} mr={2} >
+                                Visit live website
+                            </Typography>
+
+                            {users && (
+
+                                <Typography variant='body1' mr={2}  >
+                                    {users.firstName + " " + users.lastName}
+                                </Typography>
+                            )
+                            }
+                            <Avatar sx={{ cursor: 'pointer' }} {...stringAvatar(users ? users.firstName + " " + users.lastName : "")}
                                 onClick={handleMenuClick}
-                                variant="text"
-                                sx={{
-                                    textTransform: "none",
-                                    color: "#0380FF",
-                                    fontWeight: 400,
-                                    borderRadius: 3,
-                                    "@media (max-width: 915px)": {
-                                        display: "none",
-                                    },
-                                }}
-                            >
-                                <Box sx={{ pr: 1, mt: 1 }} >
-                                    <AccountCircleIcon />
-                                </Box>
-
-                            </Button>
+                            />
                             <Menu
                                 anchorEl={anchorEl}
                                 open={Boolean(anchorEl)}
                                 onClose={handleMenuClose}
                             >
-                                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+                                {/* <MenuItem onClick={handleProfileClick}>Profile</MenuItem> */}
                                 <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
                             </Menu>
                         </Box>

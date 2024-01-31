@@ -1,21 +1,15 @@
 import React, { useState } from 'react'
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
+import ActionButton from './ActionButton';
 
 
 
 export const userColumns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 200,
-    display: "flex",
-    justifyContent: "center",
-  },
-  { field: "createdAt", headerName: "Date Created", width: 200 },
+  { field: "createdAt", headerName: "Date Created", width: 300 },
   {
     field: "status",
     headerName: "Status",
-    width: 200,
+    width: 300,
     renderCell: (params) => (
       <Box
         display="flex"
@@ -26,7 +20,7 @@ export const userColumns = [
       </Box>
     ),
   },
-  { field: "owner", headerName: "User", width: 150 },
+  { field: "owner", headerName: "User", width: 350 },
 ];
 
 export const userRows = [
@@ -48,70 +42,34 @@ export const userRows = [
 ];
 
 export const datasetColumns = [
-  { field: "id", headerName: "ID", width: 150 },
-  { field: "name", headerName: "Dataset Name", width: 150 },
-  { field: "description", headerName: "Description", width: 150 },
-  { field: "status", headerName: "Dataset Type", width: 150, },
+  { field: "name", headerName: "Dataset Name", width: 250 },
+  { field: "description", headerName: "Description", width: 400 },
+  {
+    field: "status", headerName: "Dataset Type", width: 300,
+
+    renderCell: (params) => {
+      return (
+        <>
+          {params.row.status === false ? <Typography variant='body1'>Free</Typography> :
+            <Typography variant='body1'>Premium</Typography>
+          }
+        </>
+      )
+    }
+
+  },
   {
     field: "actions",
     headerName: "Actions",
-    width: 200,
+    width: 250,
     renderCell: (params) => {
-      const [anchorEl, setAnchorEl] = useState(null);
-
-      const handleEditClick = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
-
-      const handleEditClose = () => {
-        setAnchorEl(null);
-      };
-
-      return (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            variant='outlined'
-            sx={{
-              color: 'blue', textTransform: 'none', mr: 1, "&:hover": {
-                backgroundColor: 'blue',
-                color: 'white',
-                borderColor: 'blue'
-              }
-            }}
-            onClick={handleEditClick}
-          >
-            Edit
-          </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleEditClose}
-          >
-            <MenuItem onClick={() => handleEdit(params.row.id)}>Free</MenuItem>
-            <MenuItem onClick={() => handleEdit(params.row.id)}>Premium</MenuItem>
-          </Menu>
-          <Button
-            variant='outlined'
-            sx={{
-              color: 'red', textTransform: 'none', "&:hover": {
-                backgroundColor: 'red',
-                color: 'white',
-                borderColor: 'red',
-              },
-              borderColor: 'red'
-            }}
-            onClick={() => handleDelete(params.row.id)}
-          >
-            Delete
-          </Button>
-        </Box>
-      );
+      return <ActionButton datasetId={params.row.id} />
     }
   },
 ];
 
 export const datasetRows = [
-  { id: 1, name: "Dataset A", description: "Lorem ipsum", status: "Premium" },
+  { id: 1, name: "Dataset A", description: "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum", status: "Premium" },
   { id: 2, name: "Dataset B", description: "Lorem ipsum", status: "Free" },
   { id: 3, name: "Dataset C", description: "Lorem ipsum", status: "Premium" },
   { id: 4, name: "Dataset D", description: "Lorem ipsum", status: "Free" },

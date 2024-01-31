@@ -4,13 +4,15 @@ import { browserHistory } from 'react-router';
 import { enhanceReduxMiddleware } from '@kepler.gl/reducers';
 import demoReducer from './reducers/index';
 import authReducer from "./features/Authentication/AuthSlice";
+import datasetReducer from "./features/Dataset/DatasetSlice";
 import thunk from 'redux-thunk';
 // eslint-disable-next-line no-unused-vars
 
 const reducers = {
   demo: demoReducer,
-  auth: authReducer,
   routing: routerReducer,
+  auth: authReducer,
+  dataset: datasetReducer,
 };
 
 export const middlewares = enhanceReduxMiddleware([thunk, routerMiddleware(browserHistory)]);

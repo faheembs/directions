@@ -23,10 +23,9 @@ const AdminSideBar = () => {
                     color: "#C7C7C7",
                     flexShrink: 0,
                     "& .MuiDrawer-paper": {
-                        borderRadius: 4,
                         width: drawerWidth,
                         boxSizing: "border-box",
-                        boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.2)',
+                        // boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.2)',
                     },
 
                 }}
@@ -49,25 +48,20 @@ const AdminSideBar = () => {
                 <Box sx={styles.centerDiv}>
                     <Box sx={{ width: "80% !important" }}>
                         <List>
-                            {/* <Typography sx={sideBarStyles.typograpy} px={2}>
-                                Admin
-                            </Typography> */}
-                            <SidebarTabs
-                                text="Profile"
-                                iconSvg={<PersonIcon height={25} width={25} />}
-                                navigates="/dashboard/profile"
-                            />
-
                             <SidebarTabs
                                 text="Dataset Management"
                                 icon={Categories}
                                 navigates="/dashboard/datasets"
                             />
-
                             <SidebarTabs
                                 text="Users"
                                 iconSvg={<GroupIcon height={25} width={25} />}
                                 navigates="/dashboard/users"
+                            />
+                            <SidebarTabs
+                                text="Profile"
+                                iconSvg={<PersonIcon height={25} width={25} />}
+                                navigates="/dashboard/profile"
                             />
 
                         </List>
