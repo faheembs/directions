@@ -6,6 +6,7 @@ import demoReducer from './reducers/index';
 import authReducer from "./features/Authentication/AuthSlice";
 import datasetReducer from "./features/Dataset/DatasetSlice";
 import thunk from 'redux-thunk';
+import usersReducer from './features/Users/usersSlice';
 // eslint-disable-next-line no-unused-vars
 
 const reducers = {
@@ -13,6 +14,7 @@ const reducers = {
   routing: routerReducer,
   auth: authReducer,
   dataset: datasetReducer,
+  users: usersReducer,
 };
 
 export const middlewares = enhanceReduxMiddleware([thunk, routerMiddleware(browserHistory)]);

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { deleteDataset, getAllDatasets, updateIsPremium } from "../../features/Dataset/DatasetAction";
-import { Box, Button, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const ActionButton = ({ datasetId }) => {
   const dispatch = useDispatch();
@@ -38,20 +41,14 @@ const ActionButton = ({ datasetId }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Button
-        variant='outlined'
-        sx={{
-          color: 'blue', textTransform: 'none', mr: 1, "&:hover": {
-            backgroundColor: 'blue',
-            color: 'white',
-            borderColor: 'blue'
-          }
-        }}
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+      <IconButton
+        color="primary"
         onClick={handleEditClick}
+        sx={{ mr: 2 }}
       >
-        Edit
-      </Button>
+        <EditIcon />
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -60,20 +57,14 @@ const ActionButton = ({ datasetId }) => {
         <MenuItem onClick={() => handleEdit(false)}>Free</MenuItem>
         <MenuItem onClick={() => handleEdit(true)}>Premium</MenuItem>
       </Menu>
-      <Button
-        variant='outlined'
-        sx={{
-          color: 'red', textTransform: 'none', "&:hover": {
-            backgroundColor: 'red',
-            color: 'white',
-            borderColor: 'red',
-          },
-          borderColor: 'red'
-        }}
+
+
+      <IconButton
+        color="error"
         onClick={handleDeleteClick}
       >
-        Delete
-      </Button>
+        <DeleteIcon sx={{ color: 'grey', ml: "-14px" }} />
+      </IconButton>
 
       {/* Delete Confirmation Modal */}
       <Dialog

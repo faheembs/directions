@@ -30,7 +30,7 @@ function Dashboard(props) {
 
     const location = useLocation();
     const dispatch = useDispatch();
-    const mainRoute = location.pathname === '/dashboard/datasets';
+    const mainRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
     const userRoute = location.pathname === '/dashboard/users'
     const profileRoute = location.pathname === '/dashboard/profile'
 
@@ -70,7 +70,7 @@ function Dashboard(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Header screenName={mainRoute ? 'DataSets' : userRoute ? 'Users' : profileRoute ? 'Profile' : "Dashboard"} />
+                    <Header screenName={mainRoute ? 'Datasets' : userRoute ? 'Users' : profileRoute ? 'Profile' : "Dashboard"} />
                 </Toolbar>
             </AppBar>
             <Box

@@ -41,7 +41,7 @@ const Signup = () => {
 
   return (
     <Box sx={styles.authContainer}>
-      <video autoPlay muted loop style={{ position: 'absolute', width: '113%', height: '113%', objectFit: 'cover' }}>
+      <video autoPlay muted loop style={{ position: 'absolute', width: '100%', height: '112.6%', objectFit: 'cover' }}>
         <source src={animation} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -115,13 +115,18 @@ const Signup = () => {
               <Box sx={styles.buttonAlignment}>
                 <Button
                   type="submit"
-                  variant="contained"
+                  variant="outlined"
                   size="large"
                   sx={{
-                    borderRadius: "45.69px",
-                    py: 1, px: 8,
+                    // borderRadius: "45.69px",
                     mb: 2,
-                    textTransform: 'none'
+                    px: 2,
+                    textTransform: 'none',
+                    borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+                      color: 'black',
+                      backgroundColor: 'white',
+                      borderColor: 'black'
+                    },
                   }}
                   onClick={formik.handleSubmit}
                 >

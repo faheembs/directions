@@ -16,7 +16,7 @@ function stringAvatar(name) {
         sx: {
             bgcolor: "black",
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: `${name.split(' ')[0][0]}`,
     };
 }
 
@@ -46,6 +46,10 @@ function Header({ screenName }) {
     const handleLogoutClick = async () => {
         // await dispatch(userLogout());
         navigate('/login')
+        localStorage.removeItem("usersInfo");
+        localStorage.removeItem("userToken");
+        window.location.reload()
+
     };
     const handlenavigateToMap = () => {
         navigate('/directions')
@@ -56,6 +60,8 @@ function Header({ screenName }) {
             <Box
                 sx={{
                     width: "100%",
+                    display: 'flex',
+                    justifyContent: 'space-between'
                 }}
             >
                 <Box
@@ -77,6 +83,19 @@ function Header({ screenName }) {
                         />
                     </Link>
                 </Box>
+                <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 2 }}>
+                    <Typography
+                        sx={{
+                            fontWeight: 600,
+                            fontSize: "30.09px",
+                            "@media (max-width: 915px)": {
+                                fontSize: "15px",
+                            },
+                        }}
+                    >
+                        {screenName}
+                    </Typography>
+                </Box>
                 <Box
                     sx={{
                         display: "flex",
@@ -86,9 +105,7 @@ function Header({ screenName }) {
                     }}
                 >
                     <Box >
-
                         <Box sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-
                             <Typography variant='body1' sx={{ color: 'blue', textDecoration: 'underline' }} onClick={handlenavigateToMap} mr={2} >
                                 Visit live website
                             </Typography>
@@ -114,19 +131,7 @@ function Header({ screenName }) {
                         </Box>
                     </Box>
                 </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                    <Typography
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: "30.09px",
-                            "@media (max-width: 915px)": {
-                                fontSize: "15px",
-                            },
-                        }}
-                    >
-                        {screenName}
-                    </Typography>
-                </Box>
+
             </Box>
         </>
     );

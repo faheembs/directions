@@ -48,16 +48,19 @@ const AdminSideBar = () => {
                 <Box sx={styles.centerDiv}>
                     <Box sx={{ width: "80% !important" }}>
                         <List>
-                            <SidebarTabs
-                                text="Dataset Management"
-                                icon={Categories}
-                                navigates="/dashboard/datasets"
-                            />
+
                             <SidebarTabs
                                 text="Users"
                                 iconSvg={<GroupIcon height={25} width={25} />}
                                 navigates="/dashboard/users"
                             />
+
+                            <SidebarTabs
+                                text="Dataset Management"
+                                icon={Categories}
+                                navigates="/dashboard/datasets"
+                            />
+
                             <SidebarTabs
                                 text="Profile"
                                 iconSvg={<PersonIcon height={25} width={25} />}

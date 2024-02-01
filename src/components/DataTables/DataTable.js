@@ -11,7 +11,7 @@ import {
     TextareaAutosize,
     Typography,
 } from '@mui/material';
-import { userColumns, userRows, datasetColumns } from './Data';
+import { userColumns, datasetColumns } from './Data';
 import { useLocation } from 'react-router-dom';
 import {
     TextField,
@@ -26,6 +26,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useDispatch } from 'react-redux';
 import { createDataset, getAllDatasets } from '../../features/Dataset/DatasetAction';
 import { useSelector } from 'react-redux';
+import { getAllUsers } from '../../features/Users/usersAction';
 
 const modalStyles = {
     bgcolor: 'white',
@@ -68,14 +69,16 @@ export const DataTable = () => {
     };
 
     const dispatch = useDispatch()
-    const datasetRoute = location.pathname === '/dashboard/datasets';
+    const datasetRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
     const userRoute = location.pathname === '/dashboard/users';
 
     useEffect(() => {
         dispatch(getAllDatasets({}))
-    }, [dispatch])
+        dispatch(getAllUsers({}))
+    }, [])
 
     const { allDatasets, loading } = useSelector((state) => state.dataset)
+    const { allUsers, isLoading } = useSelector((state) => state.users)
 
 
 
@@ -145,8 +148,23 @@ export const DataTable = () => {
         { id: dataset._id, name: dataset.label, description: dataset.description, status: dataset.isPremium }
     )) : [];
     console.log("data set row", datasetRows)
+
+    const userRows = allUsers ? allUsers.map((user) => {
+        const formattedDate = new Date(user.createdAt).toLocaleDateString('en-GB');
+
+        return {
+            id: user._id,
+            createdAt: formattedDate,
+            firstname: user.firstName,
+            lastname: user.lastName,
+            email: user.email,
+
+        };
+    }) : [];
+
     const customRows = userRoute ? userRows : datasetRows;
     const customColumns = userRoute ? userColumns : datasetColumns;
+
     const handleFormSubmit = () => {
         const formDataToSend = {
             label: formData.title,
@@ -164,10 +182,10 @@ export const DataTable = () => {
 
         dispatch(createDataset(formDataToSend));
 
-        // handleCloseModal();
-        // setUploadedDataFiles([]);
-        // setUploadedConfigFiles([]);
-        // setUploadedImageFiles([]);
+        handleCloseModal();
+        setUploadedDataFiles([]);
+        setUploadedConfigFiles([]);
+        setUploadedImageFiles([]);
     };
 
     return (
@@ -199,9 +217,9 @@ export const DataTable = () => {
                     </Button>
                 </Box>
             ) : null}
-            {loading == true ?
-                <Box sx={{ display: 'flex', width: "100%", justifyContent: 'center' }}>
-                    <CircularProgress />
+            {loading == true || isLoading == true ?
+                <Box sx={{ display: 'flex', width: "100%", height: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: "11px", left: 0 }}>
+                    <CircularProgress sx={{ ml: '250px', color: 'black' }} />
                 </Box>
                 : <Box
                     sx={{
@@ -232,13 +250,19 @@ export const DataTable = () => {
                         sx={{ mt: 4, mb: 4 }}
                         rows={customRows}
                         columns={customColumns}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { pageSize: 8, page: 0 },
+                            },
+                        }}
                         hideFooterSelectedRowCount
 
                     />
                 </Box>}
             <Modal open={isModalOpen} onClose={handleCloseModal} sx={customStyles}>
                 <Box sx={modalStyles}>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="h6" fontWeight={700}>Add Dataset</Typography>
                         <IconButton onClick={handleCloseModal}>
                             <CloseIcon />
                         </IconButton>
@@ -255,6 +279,7 @@ export const DataTable = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
+                                    placeholder='Title'
                                     size="small"
                                     name="title"
                                     value={formData.title}
@@ -267,7 +292,7 @@ export const DataTable = () => {
                                         variant="body1"
                                         sx={{ my: 1, fontWeight: 600, fontSize: 18 }}
                                     >
-                                        Data Set Type
+                                        Dataset Type
                                     </Typography>
                                     <Select
                                         labelId="status-label"
@@ -289,7 +314,7 @@ export const DataTable = () => {
                             Description
                         </Typography>
                         <TextareaAutosize
-                            minRows={3}
+                            minRows={6}
                             placeholder="Enter description"
                             style={{
                                 width: '97.5%',
@@ -499,9 +524,19 @@ export const DataTable = () => {
                                 </Box>
                             </Grid>
                         </Grid>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }} >
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }} >
                             <Button variant="outlined" sx={{
-                                borderRadius: 8, width: 250, mt: 2, borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+                                mt: 2, px: 2, mr: 1, borderColor: 'black', backgroundColor: 'white', color: 'black', "&:hover": {
+                                    color: 'white',
+                                    backgroundColor: 'black',
+                                    borderColor: 'white'
+                                },
+
+                            }}>
+                                Cancel
+                            </Button>
+                            <Button variant="outlined" sx={{
+                                mt: 2, px: 2, borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
                                     color: 'black',
                                     backgroundColor: 'white',
                                     borderColor: 'black'
@@ -509,6 +544,7 @@ export const DataTable = () => {
                             }} onClick={handleFormSubmit}>
                                 Submit
                             </Button>
+
                         </Box>
                     </Box>
                 </Box>

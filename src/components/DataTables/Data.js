@@ -5,22 +5,14 @@ import ActionButton from './ActionButton';
 
 
 export const userColumns = [
-  { field: "createdAt", headerName: "Date Created", width: 300 },
   {
-    field: "status",
-    headerName: "Status",
+    field: "firstname",
+    headerName: "First Name",
     width: 300,
-    renderCell: (params) => (
-      <Box
-        display="flex"
-        alignItems="center"
-        sx={{ borderRadius: "29px", py: 2 }}
-      >
-        Active
-      </Box>
-    ),
   },
-  { field: "owner", headerName: "User", width: 350 },
+  { field: "lastname", headerName: "Last Name", width: 300 },
+  { field: "email", headerName: "Email", width: 300 },
+  { field: "createdAt", headerName: "Date Created", width: 300 },
 ];
 
 export const userRows = [
