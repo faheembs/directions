@@ -4,6 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import window from 'global/window';
 import { connect, useDispatch } from 'react-redux';
 import { theme } from '@kepler.gl/styles';
+import io from "socket.io-client"
 import Banner from './components/banner';
 import Announcement, { FormLink } from './components/announcement';
 import { replaceLoadDataModal } from './factories/load-data-modal';
@@ -122,6 +123,7 @@ const App = (props) => {
     ],
 
   );
+
 
 
   useEffect(() => {

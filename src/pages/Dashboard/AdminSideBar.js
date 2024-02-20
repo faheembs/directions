@@ -12,7 +12,8 @@ import GroupIcon from '@mui/icons-material/Group';
 const drawerWidth = 310;
 
 const AdminSideBar = () => {
-
+    const user = localStorage.getItem('usersInfo')
+    const users = JSON.parse(user)
     return (
         <>
             <Drawer
@@ -49,11 +50,12 @@ const AdminSideBar = () => {
                     <Box sx={{ width: "80% !important" }}>
                         <List>
 
-                            <SidebarTabs
+                            {users?.role === "admin" && (<SidebarTabs
                                 text="Users"
                                 iconSvg={<GroupIcon height={25} width={25} />}
                                 navigates="/dashboard/users"
-                            />
+                            />)
+                            }
 
                             <SidebarTabs
                                 text="Dataset Management"
@@ -78,7 +80,7 @@ const AdminSideBar = () => {
                             <SidebarTabs
                                 text="Logout"
                                 icon={Power}
-                                navigates='/logout'
+                                navigates='/login'
                             />
                         </List>
                     </Box>

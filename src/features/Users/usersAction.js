@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { baseURL } from "../../constants/baseURL"
+import { toast } from "react-toastify";
 
 const token = localStorage.getItem("userToken")
 export const getAllUsers = createAsyncThunk(
@@ -18,7 +19,7 @@ export const getAllUsers = createAsyncThunk(
                 console.log("res", responseData)
                 return responseData;
             } else {
-                toast.error("Error in getting all datasets")
+                toast.error("Error in getting all user's data")
                 const errorData = await response.json();
                 return rejectWithValue(errorData.message);
             }
@@ -47,7 +48,37 @@ export const editUser = createAsyncThunk(
                 console.log("res", responseData)
                 return responseData;
             } else {
-                toast.error("Error in getting all datasets")
+                toast.error("Error while updating the profile")
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message);
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const addPremiumDatasets = createAsyncThunk(
+    "users/add-premium",
+    async (data, { rejectWithValue }) => {
+        console.log("user data", data)
+        try {
+            console.log(data)
+            const response = await fetch(`${baseURL}users/${data.userId}/add-premium-datasets`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ datasetIds: data.datasetIds })
+
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("res", responseData)
+                return responseData;
+            } else {
+                toast.error("Error while updating the user")
                 const errorData = await response.json();
                 return rejectWithValue(errorData.message);
             }

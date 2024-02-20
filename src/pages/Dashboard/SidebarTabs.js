@@ -10,6 +10,8 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 // import { userLogout } from "../features/auth/authActions";
 import { useDispatch } from "react-redux";
+import { io } from 'socket.io-client';
+
 
 function SidebarTabs({ text, icon, navigates, iconSvg }) {
   const navigate = useNavigate();
@@ -20,10 +22,24 @@ function SidebarTabs({ text, icon, navigates, iconSvg }) {
   const isRouteActive = (route) => {
     return location.pathname === route;
   };
+  const user = localStorage.getItem('usersInfo')
+  const users = JSON.parse(user)
 
+  const handleDisconnect = () => {
+    const socket = io('http://localhost:8000');
+    socket.emit('disconnectRequest', users._id);
+    socket.disconnect();
+  };
   // Handle navigation on tab click
   const handlenavigate = async () => {
-    navigate(navigates);
+    if (navigates == "/login") {
+      navigate("/login")
+      localStorage.clear()
+      window.location.reload()
+
+    } else {
+      navigate(navigates);
+    }
   };
 
   return (

@@ -43,11 +43,10 @@ const ActionButton = ({ datasetId }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
       <IconButton
-        color="primary"
         onClick={handleEditClick}
         sx={{ mr: 2 }}
       >
-        <EditIcon />
+        <EditIcon sx={{ color: 'black' }} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}

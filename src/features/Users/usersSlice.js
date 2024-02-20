@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllUsers } from "./usersAction";
+import { addPremiumDatasets, getAllUsers } from "./usersAction";
 
 const UsersSlice = createSlice({
     name: "users",
@@ -25,7 +25,22 @@ const UsersSlice = createSlice({
             .addCase(getAllUsers.rejected, (state, action) => {
                 state.isLoading = false;
                 state.success = false;
-                state.error = "Failed to create dataset.";
+                state.error = "Failed to get users";
+            })
+            .addCase(addPremiumDatasets.pending, (state) => {
+                state.isLoading = true;
+                state.success = false;
+                state.error = null;
+            })
+            .addCase(addPremiumDatasets.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.success = true;
+                state.allUsers = action.payload.data;
+            })
+            .addCase(addPremiumDatasets.rejected, (state, action) => {
+                state.isLoading = false;
+                state.success = false;
+                state.error = "Failed to add dataset.";
             });
     },
 });

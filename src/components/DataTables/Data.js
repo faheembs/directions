@@ -1,18 +1,76 @@
-import React, { useState } from 'react'
-import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Badge, Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import ActionButton from './ActionButton';
+import UserActions from './userActions';
+import { io } from 'socket.io-client';
 
 
-
+// const user = localStorage.getItem('usersInfo')
+// const users = JSON.parse(user)
+// console.log('user id from local', JSON.parse(users._id))
 export const userColumns = [
   {
     field: "firstname",
     headerName: "First Name",
     width: 300,
+    renderCell: (params) => {
+
+      useEffect(() => {
+
+        const user = localStorage.getItem('usersInfo')
+
+        const users = JSON.parse(user)
+        console.log('user id from local', users._id)
+        const socket = io('http://localhost:8000');
+        socket.on("message", (message) => {
+          console.log("Received message from server:", message);
+          // console.log("userId from table", params)
+          // socket.on("userOnlineStatus", ({ userId, online }) => {
+          //   // const statusMessage = online ? "Online" : "Offline";
+          //   console.log(`User ${userId} is ${statusMessage}`)
+          // });
+
+        });
+        socket.emit("login", users._id);
+        const handleDisconnect = () => {
+          socket.emit('disconnectRequest', users._id);
+          socket.disconnect();
+        };
+
+        window.addEventListener('beforeunload', handleDisconnect);
+
+        return () => {
+          window.removeEventListener('beforeunload', handleDisconnect);
+        };
+      }, [])
+      return (
+        <>
+          <Badge
+            color={params.row.online ? 'success' : 'secondary'}
+            variant="dot"
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+
+          />
+          <Typography sx={{ ml: 2 }}>
+            {params.row.firstname}
+          </Typography>
+
+        </>
+      )
+    }
   },
   { field: "lastname", headerName: "Last Name", width: 300 },
   { field: "email", headerName: "Email", width: 300 },
-  { field: "createdAt", headerName: "Date Created", width: 300 },
+  { field: "createdAt", headerName: "Date Created", width: 150 },
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 150,
+    renderCell: (params) => {
+      return <UserActions selectedUserId={params.row.id} premiumDatasets={params.row.premiumDatasets} />
+    }
+  },
+
 ];
 
 export const userRows = [
@@ -48,7 +106,6 @@ export const datasetColumns = [
         </>
       )
     }
-
   },
   {
     field: "actions",

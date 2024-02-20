@@ -72,6 +72,11 @@ export const DataTable = () => {
     const datasetRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
     const userRoute = location.pathname === '/dashboard/users';
 
+    const user = localStorage.getItem('usersInfo')
+    const users = JSON.parse(user)
+    console.log('user id from local', users._id)
+
+
     useEffect(() => {
         dispatch(getAllDatasets({}))
         dispatch(getAllUsers({}))
@@ -149,15 +154,17 @@ export const DataTable = () => {
     )) : [];
     console.log("data set row", datasetRows)
 
-    const userRows = allUsers ? allUsers.map((user) => {
-        const formattedDate = new Date(user.createdAt).toLocaleDateString('en-GB');
+    const userRows = Array.isArray(allUsers) ? allUsers.map((user) => {
+        const formattedDate = new Date(user?.createdAt).toLocaleDateString('en-GB');
 
         return {
-            id: user._id,
+            id: user?._id,
             createdAt: formattedDate,
-            firstname: user.firstName,
-            lastname: user.lastName,
-            email: user.email,
+            firstname: user?.firstName,
+            lastname: user?.lastName,
+            email: user?.email,
+            premiumDatasets: user?.premiumDatasets,
+            online: user?.online
 
         };
     }) : [];
