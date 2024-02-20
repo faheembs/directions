@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import ActionButton from './ActionButton';
-import UserActions from './userActions';
+import UserActions from './UserActions';
 import { io } from 'socket.io-client';
 
 
