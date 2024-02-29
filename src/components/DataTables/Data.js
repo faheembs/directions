@@ -20,7 +20,7 @@ export const userColumns = [
 
         const users = JSON.parse(user)
         console.log('user id from local', users._id)
-        const socket = io('http://localhost:8000');
+        const socket = io('http://51.20.84.168:8000');
         socket.on("message", (message) => {
           console.log("Received message from server:", message);
           // console.log("userId from table", params)
