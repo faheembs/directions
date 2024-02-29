@@ -4,6 +4,34 @@
 /* different option share same query type e.g. events,
 and segments both use queryRunner */
 import keyMirror from 'keymirror';
+import { baseURL } from "./baseURL"
+import { toast } from "react-toastify";
+
+
+export async function fetchData() {
+  try {
+    const response = await fetch(`${baseURL}dataset/getAll`);
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log("res", responseData);
+
+      // Assuming response.data contains the map URL
+      const mapUrl = responseData?.data;
+
+      // Return the mapUrl
+      return mapUrl;
+    } else {
+      toast.error("Error in getting all datasets");
+      const errorData = await response.json();
+      return Promise.reject(errorData.message);
+    }
+  } catch (error) {
+    // Handle fetch errors here
+    console.error("Fetch error:", error);
+    toast.error("Error in fetching data");
+    return Promise.reject(error);
+  }
+}
 
 export const ASSETS_URL = 'https://d1a3f4spazzrp4.cloudfront.net/kepler.gl/';
 // export const DATA_URL = 'https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/';
@@ -13,7 +41,19 @@ export const MAP_URI = 'demo/map?mapUrl=';
  * If you want to add more samples, feel free to edit the json file on github kepler.gl data repo
  */
 // export const MAP_CONFIG_URL = `${DATA_URL}samples.json?nocache=${new Date().getTime()}`;
-export const MAP_CONFIG_URL = 'https://raw.githubusercontent.com/faheembs/directions/main/src/data/sample.json';
+// export const MAP_CONFIG_URL = 'https://raw.githubusercontent.com/faheembs/directions/main/src/data/sample.json';
+let MAP_CONFIG_URL = ''; // Initialize MAP_CONFIG_URL
+
+fetchData()
+  .then(mapUrl => {
+    MAP_CONFIG_URL = mapUrl;
+    console.log("map config url------>", MAP_CONFIG_URL) // Update MAP_CONFIG_URL with the fetched mapUrl
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+export { MAP_CONFIG_URL };
 
 /**
  * I know this is already defined in Kepler core but it should be defined here

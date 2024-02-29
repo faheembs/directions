@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import animation from '../../assets/animation2.mov'
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../features/Authentication/AuthActions";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,11 +29,17 @@ const Login = () => {
     onSubmit: async (values) => {
       const { email, password } = values;
 
-      await dispatch(userLogin({ email: email, password: password }))
-      navigate('/directions');
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000)
+      const response = await dispatch(userLogin({ email: email, password: password }))
+      console.log("response --- ", response)
+      if (response.payload !== 'Incorrect password') {
+        toast.success("Login succesfully")
+        navigate('/directions');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
+      } else {
+        toast.error(response.payload)
+      }
 
 
 

@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
-const ActionButton = ({ datasetId }) => {
+const ActionButton = ({ datasetId, role }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -42,12 +42,12 @@ const ActionButton = ({ datasetId }) => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
-      <IconButton
+      {role == "admin" && (<IconButton
         onClick={handleEditClick}
         sx={{ mr: 2 }}
       >
         <EditIcon sx={{ color: 'black' }} />
-      </IconButton>
+      </IconButton>)}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -62,7 +62,7 @@ const ActionButton = ({ datasetId }) => {
         color="error"
         onClick={handleDeleteClick}
       >
-        <DeleteIcon sx={{ color: 'grey', ml: "-14px" }} />
+        <DeleteIcon sx={{ color: 'grey', ml: role === "admin" ? "-14px" : '5px' }} />
       </IconButton>
 
       {/* Delete Confirmation Modal */}

@@ -9,6 +9,7 @@ import { LoadingDialog } from '@kepler.gl/components';
 import { FormattedMessage } from 'react-intl';
 import Modal from 'react-modal';
 import { Button } from '@mui/material';
+import sampleImage from "../../assets/sfcontour.png"
 
 const numFormat = format(',');
 
@@ -123,10 +124,16 @@ const customModalStyles = {
 
 const SampleMap = ({ id, sample, onClick, locale }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const usersInfo = localStorage.getItem("usersInfo");
+  // console.log("normal", usersInfo)
+  const userData = JSON.parse(usersInfo)
   const openModal = () => {
     setIsModalOpen(true);
   };
+
+  const filteredDataset = userData.premiumDatasets.filter((dataset) => dataset._id === sample._id)
+  const isSampleInPremiumDatasets = filteredDataset.length > 0;
+  console.log("filteredDataset", isSampleInPremiumDatasets)
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -136,8 +143,9 @@ const SampleMap = ({ id, sample, onClick, locale }) => {
     <>
       <StyledSampleMap id={id} className="sample-map-gallery__item">
         <div className="sample-map">
-          <div className="sample-map__image" onClick={sample.isPremium ? openModal : onClick}>
-            {sample.imageUrl && <img src={sample.imageUrl} />}
+          <div className="sample-map__image" onClick={isSampleInPremiumDatasets ? openModal : onClick}>
+            {console.log("sample image", sample.image)}
+            {<img src={sample.image.includes("http") ? sample.image : sampleImage} />}
             {sample.isPremium ? (
               <div className="badge premium">Premium</div>
             ) : (
@@ -232,9 +240,9 @@ const SampleMapGallery = ({
             .filter(sp => sp.visible)
             .map(sp => (
               <SampleMap
-                id={sp.id}
+                id={sp._id}
                 sample={sp}
-                key={sp.id}
+                key={sp._id}
                 onClick={() => onLoadSample(sp)}
                 locale={locale}
               />

@@ -3,8 +3,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import {
     Box,
     Button,
-    Card,
-    CardMedia,
     CircularProgress,
     Grid,
     Modal,
@@ -18,22 +16,23 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel,
     IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useDispatch } from 'react-redux';
-import { createDataset, getAllDatasets } from '../../features/Dataset/DatasetAction';
+import { createDataset, getAllDatasets, getDatasetsByUserId } from '../../features/Dataset/DatasetAction';
 import { useSelector } from 'react-redux';
 import { getAllUsers } from '../../features/Users/usersAction';
+import CombineDatasets from './CombineDatasets';
 
 const modalStyles = {
     bgcolor: 'white',
     boxShadow: 24,
     p: 4,
     width: 700,
-    height: 656,
+    height: "89%",
+    overflowX: "auto"
 };
 
 const customStyles = {
@@ -48,6 +47,7 @@ const customStyles = {
 };
 
 export const DataTable = () => {
+
     const [sortModel, setSortModel] = useState([{ field: 'id', sort: 'desc' }]);
     const location = useLocation();
     const [isModalOpen, setModalOpen] = useState(false);
@@ -62,6 +62,7 @@ export const DataTable = () => {
     const [uploadedDataFiles, setUploadedDataFiles] = useState([]);
     const [uploadedConfigFiles, setUploadedConfigFiles] = useState([]);
     const [uploadedImageFiles, setUploadedImageFiles] = useState([]);
+    const [combineModal, setCombineModal] = useState(false)
     const fileInputRefs = {
         dataFile: useRef(null),
         configFile: useRef(null),
@@ -78,15 +79,26 @@ export const DataTable = () => {
 
 
     useEffect(() => {
-        dispatch(getAllDatasets({}))
-        dispatch(getAllUsers({}))
-    }, [])
+        const userData = localStorage.getItem('usersInfo');
+        const usersData = JSON.parse(userData);
+        console.log("---------", usersData);
+        console.log("---------", usersData.role);
+        if (usersData.role === 'admin') {
+            dispatch(getAllDatasets({}));
+            dispatch(getAllUsers({}));
+        } else {
+            dispatch(getDatasetsByUserId({ userId: usersData._id }));
+        }
+    }, []);
 
-    const { allDatasets, loading } = useSelector((state) => state.dataset)
+
+    const { allDatasets, datasetById, loading, combineDatasetLoading } = useSelector((state) => state.dataset)
     const { allUsers, isLoading } = useSelector((state) => state.users)
 
 
-
+    const handleCombineOpenModal = () => {
+        setCombineModal(true)
+    }
     const handleOpenModal = () => {
         setModalOpen(true);
     };
@@ -147,8 +159,8 @@ export const DataTable = () => {
                 break;
         }
     };
-
-    const datasetRows = allDatasets ? allDatasets.map((dataset) => (
+    const datasets = users.role === "admin" ? allDatasets : datasetById;
+    const datasetRows = datasets ? datasets.map((dataset) => (
 
         { id: dataset._id, name: dataset.label, description: dataset.description, status: dataset.isPremium }
     )) : [];
@@ -184,6 +196,7 @@ export const DataTable = () => {
             dataFile,
             configFile,
             imageFile,
+            userId: users._id
         };
 
 
@@ -206,6 +219,29 @@ export const DataTable = () => {
                         textTransform: 'none',
                     }}
                 >
+                    {/* <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        borderRadius: 1,
+                        textTransform: 'none',
+                    }}> */}
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            borderColor: 'black',
+                            backgroundColor: 'white',
+                            mr: 2,
+                            color: 'black',
+                            '&:hover': {
+                                color: 'white',
+                                backgroundColor: 'black',
+                                borderColor: 'black',
+                            },
+                        }}
+                        onClick={handleCombineOpenModal}
+                    >
+                        Combine Dataset
+                    </Button>
                     <Button
                         variant="outlined"
                         sx={{
@@ -222,6 +258,7 @@ export const DataTable = () => {
                     >
                         Add Dataset
                     </Button>
+                    {/* </Box> */}
                 </Box>
             ) : null}
             {loading == true || isLoading == true ?
@@ -279,9 +316,9 @@ export const DataTable = () => {
                             <Grid item xs={6}>
                                 <Typography
                                     variant="body1"
-                                    sx={{ my: 1, fontWeight: 600, fontSize: 18 }}
+                                    sx={{ my: 1, display: 'flex', flexDirection: 'row', fontWeight: 600, fontSize: 18 }}
                                 >
-                                    Title
+                                    Title <Typography variant='body1' sx={{ color: 'red', fontWeight: 'bold', fontSize: 22 }} >*</Typography>
                                 </Typography>
                                 <TextField
                                     variant="outlined"
@@ -297,9 +334,9 @@ export const DataTable = () => {
                                 <FormControl fullWidth variant="outlined">
                                     <Typography
                                         variant="body1"
-                                        sx={{ my: 1, fontWeight: 600, fontSize: 18 }}
+                                        sx={{ my: 1, display: 'flex', flexDirection: 'row', fontWeight: 600, fontSize: 18 }}
                                     >
-                                        Dataset Type
+                                        Dataset Type <Typography variant='body1' sx={{ color: 'red', fontWeight: 'bold', fontSize: 22 }} >*</Typography>
                                     </Typography>
                                     <Select
                                         labelId="status-label"
@@ -338,9 +375,9 @@ export const DataTable = () => {
                             <Grid item xs={6}>
                                 <Typography
                                     variant="body1"
-                                    sx={{ mt: 1, fontWeight: 600, fontSize: 18 }}
+                                    sx={{ mt: 1, display: 'flex', flexDirection: 'row', fontWeight: 600, fontSize: 18 }}
                                 >
-                                    Upload Data file
+                                    Upload Data file <Typography variant='body1' sx={{ color: 'red', fontWeight: 'bold', fontSize: 22 }} >*</Typography>
                                 </Typography>
                                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                     <Box
@@ -350,7 +387,7 @@ export const DataTable = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             textAlign: 'center',
-                                            border: '1px dotted black',
+                                            border: '1px dashed black',
                                             width: 400,
                                             borderRadius: 2,
                                             padding: '20px 0px ',
@@ -399,13 +436,16 @@ export const DataTable = () => {
                                         )}
                                     </Box>
                                 </Box>
+                                <Box >
+                                    <Typography variant='subtitle2' sx={{ color: 'grey', mt: '2px' }}>  Supported formats:  CSV, Json, GeoJSON, and Excel </Typography>
+                                </Box>
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography
                                     variant="body1"
-                                    sx={{ mt: 1, fontWeight: 600, fontSize: 18 }}
+                                    sx={{ mt: 1, display: 'flex', flexDirection: 'row', fontWeight: 600, fontSize: 18 }}
                                 >
-                                    Upload Config file
+                                    Upload Config file<Typography variant='body1' sx={{ color: 'transparent', fontWeight: 'bold', fontSize: 22 }} >*</Typography>
                                 </Typography>
                                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                     <Box
@@ -415,7 +455,7 @@ export const DataTable = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             textAlign: 'center',
-                                            border: '1px dotted black',
+                                            border: '1px dashed black',
                                             width: 400,
                                             borderRadius: 2,
                                             padding: '20px 0px ',
@@ -464,13 +504,16 @@ export const DataTable = () => {
                                         )}
                                     </Box>
                                 </Box>
+                                <Box >
+                                    <Typography variant='subtitle2' sx={{ color: 'grey', mt: '2px', textAlign: 'right' }}>  Supported formats: Json </Typography>
+                                </Box>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography
                                     variant="body1"
-                                    sx={{ mt: 1, fontWeight: 600, fontSize: 18 }}
+                                    sx={{ mt: 1, display: 'flex', flexDirection: 'row', fontWeight: 600, fontSize: 18 }}
                                 >
-                                    Upload Image
+                                    Upload Image <Typography variant='body1' sx={{ color: 'red', fontWeight: 'bold', fontSize: 22 }} >*</Typography>
                                 </Typography>
                                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                     <Box
@@ -480,7 +523,7 @@ export const DataTable = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             textAlign: 'center',
-                                            border: '1px dotted black',
+                                            border: '1px dashed black',
                                             width: '100%',
                                             borderRadius: 2,
                                             padding: '20px 0px ',
@@ -529,21 +572,25 @@ export const DataTable = () => {
                                         )}
                                     </Box>
                                 </Box>
+                                <Box >
+                                    <Typography variant='subtitle2' sx={{ color: 'grey', mt: '2px' }}>  Supported formats: Png, Jpg, Jpeg </Typography>
+                                </Box>
                             </Grid>
                         </Grid>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }} >
                             <Button variant="outlined" sx={{
-                                mt: 2, px: 2, mr: 1, borderColor: 'black', backgroundColor: 'white', color: 'black', "&:hover": {
+                                px: 2, mr: 1, borderColor: 'black', backgroundColor: 'white', color: 'black', "&:hover": {
                                     color: 'white',
                                     backgroundColor: 'black',
                                     borderColor: 'white'
                                 },
-
-                            }}>
+                            }}
+                                onClick={handleCloseModal}
+                            >
                                 Cancel
                             </Button>
                             <Button variant="outlined" sx={{
-                                mt: 2, px: 2, borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+                                px: 2, borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
                                     color: 'black',
                                     backgroundColor: 'white',
                                     borderColor: 'black'
@@ -556,6 +603,8 @@ export const DataTable = () => {
                     </Box>
                 </Box>
             </Modal>
+
+            {combineModal && <CombineDatasets combineModal={combineModal} setCombineModal={setCombineModal} />}
         </>
     );
 };

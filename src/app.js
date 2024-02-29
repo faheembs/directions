@@ -119,7 +119,7 @@ const App = (props) => {
       replaceLoadDataModal(),
       replaceMapControl(),
       replacePanelHeader(),
-      [PanelHeaderFactory, myCustomHeaderFactory]
+      // [PanelHeaderFactory, myCustomHeaderFactory]
     ],
 
   );
@@ -189,202 +189,202 @@ const App = (props) => {
     // loadS2Data();
   };
 
-  const loadPointData = () => {
-    dispatch(
-      addDataToMap({
-        datasets: {
-          info: {
-            label: 'Sample Taxi Trips in New York City',
-            id: 'test_trip_data'
-          },
-          data: sampleTripData
-        },
-        options: {
-          keepExistingConfig: true
-        },
-        config: sampleTripDataConfig
-      })
-    );
-  };
+  // const loadPointData = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: {
+  //         info: {
+  //           label: 'Sample Taxi Trips in New York City',
+  //           id: 'test_trip_data'
+  //         },
+  //         data: sampleTripData
+  //       },
+  //       options: {
+  //         keepExistingConfig: true
+  //       },
+  //       config: sampleTripDataConfig
+  //     })
+  //   );
+  // };
 
-  const loadScenegraphLayer = () => {
-    dispatch(
-      addDataToMap({
-        datasets: {
-          info: {
-            label: 'Sample Scenegraph Ducks',
-            id: 'test_trip_data'
-          },
-          data: processCsvData(testCsvData)
-        },
-        config: {
-          version: 'v1',
-          config: {
-            visState: {
-              layers: [
-                {
-                  type: '3D',
-                  config: {
-                    dataId: 'test_trip_data',
-                    columns: {
-                      lat: 'gps_data.lat',
-                      lng: 'gps_data.lng'
-                    },
-                    isVisible: true
-                  }
-                }
-              ]
-            }
-          }
-        }
-      })
-    );
-  };
+  // const loadScenegraphLayer = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: {
+  //         info: {
+  //           label: 'Sample Scenegraph Ducks',
+  //           id: 'test_trip_data'
+  //         },
+  //         data: processCsvData(testCsvData)
+  //       },
+  //       config: {
+  //         version: 'v1',
+  //         config: {
+  //           visState: {
+  //             layers: [
+  //               {
+  //                 type: '3D',
+  //                 config: {
+  //                   dataId: 'test_trip_data',
+  //                   columns: {
+  //                     lat: 'gps_data.lat',
+  //                     lng: 'gps_data.lng'
+  //                   },
+  //                   isVisible: true
+  //                 }
+  //               }
+  //             ]
+  //           }
+  //         }
+  //       }
+  //     })
+  //   );
+  // };
 
-  const loadIconData = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'Icon Data',
-              id: 'test_icon_data'
-            },
-            data: processCsvData(sampleIconCsv)
-          }
-        ]
-      })
-    );
-  };
+  // const loadIconData = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: {
+  //             label: 'Icon Data',
+  //             id: 'test_icon_data'
+  //           },
+  //           data: processCsvData(sampleIconCsv)
+  //         }
+  //       ]
+  //     })
+  //   );
+  // };
 
-  const loadTripGeoJson = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: { label: 'Trip animation', id: animateTripDataId },
-            data: processGeojson(sampleAnimateTrip)
-          }
-        ]
-      })
-    );
-  };
+  // const loadTripGeoJson = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: { label: 'Trip animation', id: animateTripDataId },
+  //           data: processGeojson(sampleAnimateTrip)
+  //         }
+  //       ]
+  //     })
+  //   );
+  // };
 
-  const replaceData = () => {
-    const sliceData = processGeojson({
-      type: 'FeatureCollection',
-      features: sampleGeojsonPoints.features.slice(0, 5)
-    });
-    loadGeojsonData();
-    window.setTimeout(() => {
-      dispatch(
-        replaceDataInMap({
-          datasetToReplaceId: 'bart-stops-geo',
-          datasetToUse: {
-            info: { label: 'Bart Stops Geo Replaced', id: 'bart-stops-geo-2' },
-            data: sliceData
-          }
-        })
-      );
-    }, 1000);
-  };
+  // const replaceData = () => {
+  //   const sliceData = processGeojson({
+  //     type: 'FeatureCollection',
+  //     features: sampleGeojsonPoints.features.slice(0, 5)
+  //   });
+  //   loadGeojsonData();
+  //   window.setTimeout(() => {
+  //     dispatch(
+  //       replaceDataInMap({
+  //         datasetToReplaceId: 'bart-stops-geo',
+  //         datasetToUse: {
+  //           info: { label: 'Bart Stops Geo Replaced', id: 'bart-stops-geo-2' },
+  //           data: sliceData
+  //         }
+  //       })
+  //     );
+  //   }, 1000);
+  // };
 
 
-  const loadGeojsonData = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: { label: 'Bart Stops Geo', id: 'bart-stops-geo' },
-            data: processGeojson(sampleGeojsonPoints)
-          },
-          {
-            info: { label: 'SF Zip Geo', id: 'sf-zip-geo' },
-            data: processGeojson(sampleGeojson)
-          }
-        ],
-        options: {
-          keepExistingConfig: true
-        },
-        config: sampleGeojsonConfig
-      })
-    );
-  };
+  // const loadGeojsonData = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: { label: 'Bart Stops Geo', id: 'bart-stops-geo' },
+  //           data: processGeojson(sampleGeojsonPoints)
+  //         },
+  //         {
+  //           info: { label: 'SF Zip Geo', id: 'sf-zip-geo' },
+  //           data: processGeojson(sampleGeojson)
+  //         }
+  //       ],
+  //       options: {
+  //         keepExistingConfig: true
+  //       },
+  //       config: sampleGeojsonConfig
+  //     })
+  //   );
+  // };
 
-  const loadH3HexagonData = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'H3 Hexagons V2',
-              id: 'h3-hex-id'
-            },
-            data: processCsvData(sampleH3Data)
-          }
-        ],
-        config: h3MapConfig,
-        options: {
-          keepExistingConfig: true
-        }
-      })
-    );
-  };
+  // const loadH3HexagonData = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: {
+  //             label: 'H3 Hexagons V2',
+  //             id: 'h3-hex-id'
+  //           },
+  //           data: processCsvData(sampleH3Data)
+  //         }
+  //       ],
+  //       config: h3MapConfig,
+  //       options: {
+  //         keepExistingConfig: true
+  //       }
+  //     })
+  //   );
+  // };
 
-  const loadS2Data = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'S2 Data',
-              id: s2DataId
-            },
-            data: processCsvData(sampleS2Data)
-          }
-        ],
-        config: s2MapConfig,
-        options: {
-          keepExistingConfig: true
-        }
-      })
-    );
-  };
+  // const loadS2Data = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: {
+  //             label: 'S2 Data',
+  //             id: s2DataId
+  //           },
+  //           data: processCsvData(sampleS2Data)
+  //         }
+  //       ],
+  //       config: s2MapConfig,
+  //       options: {
+  //         keepExistingConfig: true
+  //       }
+  //     })
+  //   );
+  // };
 
-  const loadGpsData = () => {
-    dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'Gps Data',
-              id: 'gps-data'
-            },
-            data: processCsvData(sampleGpsData)
-          }
-        ],
-        options: {
-          keepExistingConfig: true
-        }
-      })
-    );
-  };
+  // const loadGpsData = () => {
+  //   dispatch(
+  //     addDataToMap({
+  //       datasets: [
+  //         {
+  //           info: {
+  //             label: 'Gps Data',
+  //             id: 'gps-data'
+  //           },
+  //           data: processCsvData(sampleGpsData)
+  //         }
+  //       ],
+  //       options: {
+  //         keepExistingConfig: true
+  //       }
+  //     })
+  //   );
+  // };
 
-  const toggleCloudModal = () => {
-    setShowBanner(!showBanner);
-  };
+  // const toggleCloudModal = () => {
+  //   setShowBanner(!showBanner);
+  // };
 
-  const getMapboxRef = (mapbox, index) => {
-    if (!mapbox) {
-      // The ref has been unset.
-      // console.log(`Map ${index} has closed`);
-    } else {
-      const map = mapbox.getMap();
-      map.on('zoomend', e => {
-        // console.log(`Map ${index} zoom level: ${e.target.style.z}`);
-      });
-    }
-  };
+  // const getMapboxRef = (mapbox, index) => {
+  //   if (!mapbox) {
+  //     // The ref has been unset.
+  //     // console.log(`Map ${index} has closed`);
+  //   } else {
+  //     const map = mapbox.getMap();
+  //     map.on('zoomend', e => {
+  //       // console.log(`Map ${index} zoom level: ${e.target.style.z}`);
+  //     });
+  //   }
+  // };
 
   return (
     <ThemeProvider theme={theme}>

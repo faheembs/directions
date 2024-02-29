@@ -170,7 +170,7 @@ function loadRemoteRawData(url) {
 /**
  *
  * @param {Object} options
- * @param {string} [options.dataUrl] the URL to fetch data from, e.g. https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/earthquakes/data.csv
+ * @param {string} [options.dataUrl] 
  * @param {string} [options.configUrl] the URL string to fetch kepler config from, e.g. https://raw.githubusercontent.com/keplergl/kepler.gl-data/master/earthquakes/config.json
  * @param {string} [options.id] the id used as dataset unique identifier, e.g. earthquakes
  * @param {string} [options.label] the label used to describe the new dataset, e.g. California Earthquakes
@@ -186,11 +186,11 @@ export function loadSample(options, pushRoute = true) {
     const { routing } = getState();
     if (options.id && pushRoute) {
 
-      dispatch(push(`/demo/${options.id}${routing.locationBeforeTransitions?.search ?? ''}`));
+      dispatch(push(`/demo/${options._id}${routing.locationBeforeTransitions?.search ?? ''}`));
     }
     // if the sample has a kepler.gl config file url we load it
-    if (options.keplergl) {
-      dispatch(loadRemoteMap({ dataUrl: options.keplergl }));
+    if (options.dataUrl) {
+      dispatch(loadRemoteMap({ dataUrl: options.dataUrl }));
     } else {
       dispatch(loadRemoteSampleMap(options));
     }
@@ -304,30 +304,36 @@ function loadRemoteData(url) {
  */
 export function loadSampleConfigurations(sampleMapId = null) {
   return dispatch => {
-    requestJson(MAP_CONFIG_URL, (error, samples) => {
-      if (error) {
-        const { target = {} } = error;
-        const { status, responseText } = target;
-        dispatch(
-          loadRemoteResourceError(
-            { status, message: `${responseText} - ${LOADING_SAMPLE_LIST_ERROR_MESSAGE}` },
-            MAP_CONFIG_URL
-          )
-        );
-      } else {
-        const responseError = detectResponseError(samples);
-        if (responseError) {
-          dispatch(loadRemoteResourceError(responseError, MAP_CONFIG_URL));
-          return;
-        }
+    // requestJson(MAP_CONFIG_URL, (error, samples) => {
+    //   if (error) {
+    //     const { target = {} } = error;
+    //     const { status, responseText } = target;
+    //     dispatch(
+    //       loadRemoteResourceError(
+    //         { status, message: `${responseText} - ${LOADING_SAMPLE_LIST_ERROR_MESSAGE}` },
+    //         MAP_CONFIG_URL
+    //       )
+    //     );
+    //   } else {
+    //     const responseError = detectResponseError(samples);
+    //     if (responseError) {
+    //       dispatch(loadRemoteResourceError(responseError, MAP_CONFIG_URL));
+    //       return;
+    //     }
 
-        dispatch(loadMapSampleFile(samples));
-        // Load the specified map
-        const map = sampleMapId && samples.find(s => s.id === sampleMapId);
-        if (map) {
-          dispatch(loadSample(map, false));
-        }
-      }
-    });
+    //     dispatch(loadMapSampleFile(samples));
+    //     // Load the specified map 
+    //     const map = sampleMapId && samples.find(s => s.id === sampleMapId);
+    //     if (map) {
+    //       dispatch(loadSample(map, false));
+    //     }
+    //   }
+    // });
+    dispatch(loadMapSampleFile(MAP_CONFIG_URL));
+    // Load the specified map
+    const map = sampleMapId && MAP_CONFIG_URL.find(s => s._id === sampleMapId);
+    if (map) {
+      dispatch(loadSample(map, false));
+    }
   };
 }

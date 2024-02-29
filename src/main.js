@@ -17,9 +17,9 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Dashboard/profile/Profile';
 import DataTable from './components/DataTables/DataTable';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
+import 'react-toastify/dist/ReactToastify.css';
 
 const history = syncHistoryWithStore(browserHistory, store);
 

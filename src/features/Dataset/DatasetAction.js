@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { baseURL } from "../../constants/baseURL"
 import { toast } from "react-toastify";
+import { json } from "d3-request";
 
 
 
@@ -10,6 +11,25 @@ export const getAllDatasets = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await fetch(`${baseURL}dataset/getAll`);
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("res", responseData)
+                return responseData;
+            } else {
+                toast.error("Error in getting all datasets")
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message);
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+export const getDatasetsByUserId = createAsyncThunk(
+    "dataset/byUserId",
+    async ({ userId }, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${baseURL}users/${userId}/datasets`);
             if (response.ok) {
                 const responseData = await response.json();
                 console.log("res", responseData)
@@ -74,7 +94,7 @@ export const createDataset = createAsyncThunk(
 
                 form_data.append("image", formDataToSend.imageFile);
             }
-            const response = await fetch(`${baseURL}dataset/create`, {
+            const response = await fetch(`${baseURL}dataset/${formDataToSend.userId}/create`, {
                 method: "POST",
                 headers: {
                     // "Content-Type": "multipart/form-data; boundary=123456789234567845"
@@ -121,6 +141,62 @@ export const deleteDataset = createAsyncThunk(
                 toast.warn("Dataset deleted!")
                 return responseData;
             } else {
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message);
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const createCombineDataset = createAsyncThunk(
+    "dataset/combine",
+    async (body, { rejectWithValue }) => {
+        console.log("combine-body  ---->", body)
+        try {
+
+            const response = await fetch(`${baseURL}combinedDatasets/createCombined`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body),
+            });
+            if (response) {
+                const responseData = await response.json();
+                console.log("try", responseData)
+                if (responseData.data) {
+                    toast.success("Dataset is combined")
+                    return responseData;
+                } else {
+                    toast.error("Dataset doesnot combined!")
+                    return responseData.message;
+                }
+            }
+        } catch (error) {
+            console.log("catch", error)
+            if (error.response) {
+
+                return rejectWithValue(error?.response?.data?.error?.message);
+            } else {
+                return rejectWithValue(error.message);
+            }
+        }
+    }
+);
+
+export const getAllCombinedDatasets = createAsyncThunk(
+    "dataset/get-all-combined",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${baseURL}combinedDatasets/get-all`);
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("res", responseData)
+                return responseData;
+            } else {
+                toast.error("Error in getting all combined datasets")
                 const errorData = await response.json();
                 return rejectWithValue(errorData.message);
             }

@@ -5,9 +5,8 @@ import UserActions from './UserActions';
 import { io } from 'socket.io-client';
 
 
-// const user = localStorage.getItem('usersInfo')
-// const users = JSON.parse(user)
-// console.log('user id from local', JSON.parse(users._id))
+
+
 export const userColumns = [
   {
     field: "firstname",
@@ -112,7 +111,10 @@ export const datasetColumns = [
     headerName: "Actions",
     width: 250,
     renderCell: (params) => {
-      return <ActionButton datasetId={params.row.id} />
+      const user = localStorage.getItem('usersInfo')
+      const users = JSON.parse(user)
+      console.log('user role from local', users.role)
+      return <ActionButton role={users.role} datasetId={params.row.id} />
     }
   },
 ];
