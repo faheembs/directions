@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 // import { userLogout } from "../features/auth/authActions";
 import { useDispatch } from "react-redux";
 import { io } from 'socket.io-client';
+import { socketBaseURL } from '../../constants/baseURL';
 
 
 function SidebarTabs({ text, icon, navigates, iconSvg }) {
@@ -23,18 +24,21 @@ function SidebarTabs({ text, icon, navigates, iconSvg }) {
     return location.pathname === route;
   };
   const user = localStorage.getItem('usersInfo')
+
   const users = JSON.parse(user)
 
   const handleDisconnect = () => {
-    const socket = io('http://localhost:8000');
+    const socket = io(socketBaseURL);
     socket.emit('disconnectRequest', users._id);
     socket.disconnect();
   };
   // Handle navigation on tab click
   const handlenavigate = async () => {
     if (navigates == "/login") {
-      navigate("/login")
-      localStorage.clear()
+      handleDisconnect()
+      navigate('/login')
+      localStorage.removeItem("usersInfo");
+      localStorage.removeItem("userToken");
       window.location.reload()
 
     } else {

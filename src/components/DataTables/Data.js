@@ -14,34 +14,7 @@ export const userColumns = [
     width: 300,
     renderCell: (params) => {
 
-      useEffect(() => {
 
-        const user = localStorage.getItem('usersInfo')
-
-        const users = JSON.parse(user)
-        console.log('user id from local', users._id)
-        const socket = io('http://localhost:8000');
-        socket.on("message", (message) => {
-          console.log("Received message from server:", message);
-          // console.log("userId from table", params)
-          // socket.on("userOnlineStatus", ({ userId, online }) => {
-          //   // const statusMessage = online ? "Online" : "Offline";
-          //   console.log(`User ${userId} is ${statusMessage}`)
-          // });
-
-        });
-        socket.emit("login", users._id);
-        const handleDisconnect = () => {
-          socket.emit('disconnectRequest', users._id);
-          socket.disconnect();
-        };
-
-        window.addEventListener('beforeunload', handleDisconnect);
-
-        return () => {
-          window.removeEventListener('beforeunload', handleDisconnect);
-        };
-      }, [])
       return (
         <>
           <Badge

@@ -13,21 +13,18 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
 import DataTable from "../../components/DataTables/DataTable";
 import Profile from "./profile/Profile";
+import { io } from 'socket.io-client';
+import { getAllUsers } from "../../features/Users/usersAction";
+import { socketBaseURL } from "../../constants/baseURL";
+
 
 const drawerWidth = 300;
-const fakeData = [
-    {
-        mainLabel: 'Κατάσταση',
-    },
-    {
-        mainLabel: 'Κατηγορία',
-    },
-];
+
 
 function Dashboard(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = useState(false);
-
+    const [onlineStatus, setOnlineStatus] = useState(false);
     const location = useLocation();
     const dispatch = useDispatch();
     const mainRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
@@ -35,7 +32,47 @@ function Dashboard(props) {
     const profileRoute = location.pathname === '/dashboard/profile'
 
 
+    useEffect(() => {
 
+        const user = localStorage.getItem('usersInfo')
+
+        const users = JSON.parse(user)
+        console.log('user id from local', users._id)
+        const socket = io(socketBaseURL);
+        socket.on("message", (message) => {
+            console.log("Received message from server:", message);
+            // console.log("userId from table", params)
+            // socket.on("userOnlineStatus", ({ userId, online }) => {
+            //   // const statusMessage = online ? "Online" : "Offline";
+            //   console.log(`User ${userId} is ${statusMessage}`)
+            // });
+
+        });
+        socket.on('userOnlineStatus', (userId, online) => {
+            setOnlineStatus(online);
+            if (users.role === "admin") { dispatch(getAllUsers({})) }
+            console.log("online status changed")
+
+        })
+        socket.emit("login", users._id);
+        dispatch(getAllUsers({}));
+        const handleDisconnect = () => {
+            socket.emit('disconnectRequest', users._id);
+            socket.disconnect();
+        };
+
+        if (typeof window !== 'undefined') {
+            // Add event listener for beforeunload event
+            window.addEventListener('beforeunload', handleDisconnect);
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('beforeunload', handleDisconnect);
+            }
+        };
+
+    }, [onlineStatus])
 
 
     const handleDrawerToggle = () => {

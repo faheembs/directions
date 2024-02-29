@@ -25,6 +25,10 @@ import { createDataset, getAllDatasets, getDatasetsByUserId } from '../../featur
 import { useSelector } from 'react-redux';
 import { getAllUsers } from '../../features/Users/usersAction';
 import CombineDatasets from './CombineDatasets';
+import { io } from 'socket.io-client';
+import { socketBaseURL } from '../../constants/baseURL';
+
+
 
 const modalStyles = {
     bgcolor: 'white',
@@ -89,6 +93,33 @@ export const DataTable = () => {
         } else {
             dispatch(getDatasetsByUserId({ userId: usersData._id }));
         }
+        const user = localStorage.getItem('usersInfo')
+
+        const users = JSON.parse(user)
+        console.log('user id from local', users._id)
+        const socket = io(socketBaseURL);
+        socket.on("message", (message) => {
+            console.log("Received message from server:", message);
+            // console.log("userId from table", params)
+            // socket.on("userOnlineStatus", ({ userId, online }) => {
+            //   // const statusMessage = online ? "Online" : "Offline";
+            //   console.log(`User ${userId} is ${statusMessage}`)
+            // });
+
+        });
+
+        socket.emit("login", users._id);
+        dispatch(getAllUsers({}));
+        const handleDisconnect = () => {
+            socket.emit('disconnectRequest', users._id);
+            socket.disconnect();
+        };
+
+        window.addEventListener('beforeunload', handleDisconnect);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleDisconnect);
+        };
     }, []);
 
 

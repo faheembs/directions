@@ -35,6 +35,8 @@ import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
 import logo from './assets/Slide1.png'
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getAllUsers } from './features/Users/usersAction';
+import { socketBaseURL } from './constants/baseURL';
 /* eslint-enable no-unused-vars */
 
 const CustomHeader = () => {
@@ -114,6 +116,8 @@ const App = (props) => {
   const dispatch = useDispatch();
 
   const [showBanner, setShowBanner] = useState(false);
+  const [onlineStatus, setOnlineStatus] = useState(false);
+
   const KeplerGl = injectComponents(
     [
       replaceLoadDataModal(),
@@ -124,7 +128,39 @@ const App = (props) => {
 
   );
 
+  useEffect(() => {
 
+    const user = localStorage.getItem('usersInfo')
+
+    const users = JSON.parse(user)
+    console.log('user id from local', users._id)
+
+
+    const socket = io(socketBaseURL);
+    socket.on('userOnlineStatus', (userId, online) => {
+      setOnlineStatus(online);
+      if (users.role === "admin") { dispatch(getAllUsers({})) }
+      console.log("online status changed")
+
+    })
+    socket.emit("login", users._id);
+    if (users.role === "admin") { dispatch(getAllUsers({})) }
+    const handleDisconnect = () => {
+      socket.emit('disconnectRequest', users._id);
+      socket.disconnect();
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', handleDisconnect);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('beforeunload', handleDisconnect);
+      }
+    };
+
+  }, [onlineStatus])
 
   useEffect(() => {
     const { params: { id, provider } = {}, location: { query = {} } = {} } = props;
