@@ -33,9 +33,10 @@ function SidebarTabs({ text, icon, navigates, iconSvg }) {
   // Handle navigation on tab click
   const handlenavigate = async () => {
     if (navigates == "/login") {
-      navigate("/login")
-      localStorage.clear()
-      window.location.reload()
+     navigate('/login')
+        localStorage.removeItem("usersInfo");
+        localStorage.removeItem("userToken");
+        window.location.reload()
 
     } else {
       navigate(navigates);
