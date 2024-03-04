@@ -21,7 +21,6 @@ const Profile = () => {
   const data = localStorage.getItem("usersInfo");
   const userData = JSON.parse(data)
 
-  console.log("User Data ------>", profileData)
   useEffect(() => {
     const data = localStorage.getItem("usersInfo");
     const userData = JSON.parse(data);
@@ -42,13 +41,13 @@ const Profile = () => {
   };
   const saveProfile = () => {
 
-    console.log('Profile saved:', profileData);
+    // console.log('Profile saved:', profileData);
     dispatch(editUser({
-      userId: userData.id,
+      userId: userData?.id,
       body: {
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        email: profileData.email,
+        firstName: profileData?.firstName,
+        lastName: profileData?.lastName,
+        email: profileData?.email,
       },
     }));
 
@@ -63,7 +62,7 @@ const Profile = () => {
           <InputProfile
             label="First Name"
             placeholder="Enter first name"
-            value={userData.firstName}
+            value={userData?.firstName}
             onChangeFeild={(e) => handleInputChange(e, 'firstName')}
             disabled={disabledFields}
           />
@@ -72,7 +71,7 @@ const Profile = () => {
           <InputProfile
             label="Last Name"
             placeholder="Enter last name"
-            value={userData.lastName}
+            value={userData?.lastName}
             onChangeFeild={(e) => handleInputChange(e, 'lastName')}
             disabled={disabledFields}
           />
@@ -81,7 +80,7 @@ const Profile = () => {
           <InputProfile
             label="Email"
             placeholder="Enter email"
-            value={userData.email}
+            value={userData?.email}
             onChangeFeild={(e) => handleInputChange(e, 'email')}
             disabled={disabledFields}
           />

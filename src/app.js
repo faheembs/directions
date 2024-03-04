@@ -34,7 +34,7 @@ import { processCsvData, processGeojson } from '@kepler.gl/processors';
 import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
 import logo from './assets/Slide1.png'
 import { Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useNavigation } from 'react-router-dom';
 import { getAllUsers } from './features/Users/usersAction';
 import { socketBaseURL } from './constants/baseURL';
 /* eslint-enable no-unused-vars */
@@ -114,6 +114,7 @@ const CONTAINER_STYLE = {
 
 const App = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showBanner, setShowBanner] = useState(false);
   const [onlineStatus, setOnlineStatus] = useState(false);
@@ -129,14 +130,18 @@ const App = (props) => {
   );
 
   useEffect(() => {
+    const token = localStorage.getItem('userToken')
+    if (!token) {
+      navigate("/login")
+      window.reload()
 
+    }
     const user = localStorage.getItem('usersInfo')
 
     const users = JSON.parse(user)
     console.log('user id from local', users._id)
-
-
     const socket = io(socketBaseURL);
+
     socket.on('userOnlineStatus', (userId, online) => {
       setOnlineStatus(online);
       if (users.role === "admin") { dispatch(getAllUsers({})) }

@@ -10,7 +10,7 @@ import {
     Typography,
 } from '@mui/material';
 import { userColumns, datasetColumns } from './Data';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     TextField,
     Select,
@@ -79,24 +79,28 @@ export const DataTable = () => {
 
     const user = localStorage.getItem('usersInfo')
     const users = JSON.parse(user)
-    console.log('user id from local', users._id)
+    const navigate = useNavigate()
 
 
     useEffect(() => {
         const userData = localStorage.getItem('usersInfo');
         const usersData = JSON.parse(userData);
-        console.log("---------", usersData);
-        console.log("---------", usersData.role);
-        if (usersData.role === 'admin') {
+        const userToken = localStorage.getItem('userToken');
+        if (!userToken) {
+            console.log("no")
+            navigate("/login")
+            window.reload()
+        }
+        if (userToken && usersData?.role === 'admin') {
             dispatch(getAllDatasets({}));
             dispatch(getAllUsers({}));
         } else {
-            dispatch(getDatasetsByUserId({ userId: usersData._id }));
+            dispatch(getDatasetsByUserId({ userId: usersData?._id }));
         }
         const user = localStorage.getItem('usersInfo')
 
         const users = JSON.parse(user)
-        console.log('user id from local', users._id)
+        // console.log('user id from local', users?._id)
         const socket = io(socketBaseURL);
         socket.on("message", (message) => {
             console.log("Received message from server:", message);
@@ -108,10 +112,10 @@ export const DataTable = () => {
 
         });
 
-        socket.emit("login", users._id);
+        socket.emit("login", users?._id);
         dispatch(getAllUsers({}));
         const handleDisconnect = () => {
-            socket.emit('disconnectRequest', users._id);
+            socket.emit('disconnectRequest', users?._id);
             socket.disconnect();
         };
 
@@ -190,8 +194,8 @@ export const DataTable = () => {
                 break;
         }
     };
-    const datasets = users.role === "admin" ? allDatasets : datasetById;
-    const datasetRows = datasets ? datasets.map((dataset) => (
+    const datasets = users?.role === "admin" ? allDatasets : datasetById;
+    const datasetRows = datasets ? datasets?.map((dataset) => (
 
         { id: dataset._id, name: dataset.label, description: dataset.description, status: dataset.isPremium }
     )) : [];
@@ -215,7 +219,9 @@ export const DataTable = () => {
     const customRows = userRoute ? userRows : datasetRows;
     const customColumns = userRoute ? userColumns : datasetColumns;
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async () => {
+        const userData = localStorage.getItem('usersInfo');
+        const usersData = JSON.parse(userData);
         const formDataToSend = {
             label: formData.title,
             queryType: "sample",
@@ -231,12 +237,14 @@ export const DataTable = () => {
         };
 
 
-        dispatch(createDataset(formDataToSend));
-
         handleCloseModal();
+        await dispatch(createDataset(formDataToSend));
+
         setUploadedDataFiles([]);
         setUploadedConfigFiles([]);
         setUploadedImageFiles([]);
+
+        dispatch(getDatasetsByUserId({ userId: usersData?._id }));
     };
 
     return (

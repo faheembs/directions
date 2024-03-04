@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteDataset, getAllDatasets, updateIsPremium } from "../../features/Dataset/DatasetAction";
+import { deleteDataset, getAllDatasets, getDatasetsByUserId, updateIsPremium } from "../../features/Dataset/DatasetAction";
 import { Box, Button, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,6 +10,10 @@ const ActionButton = ({ datasetId, role }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+
+  const userData = localStorage.getItem('usersInfo');
+  const usersData = JSON.parse(userData);
 
   const handleEdit = async (val) => {
     await dispatch(updateIsPremium({ datasetId: datasetId, isPremium: val }));
@@ -23,7 +27,12 @@ const ActionButton = ({ datasetId, role }) => {
 
   const handleDeleteConfirm = async () => {
     await dispatch(deleteDataset(datasetId));
-    dispatch(getAllDatasets({}));
+    if (usersData?.role === "admin") {
+      dispatch(getAllDatasets({}));
+    } else {
+      dispatch(getDatasetsByUserId({ userId: usersData?._id }))
+
+    }
     setAnchorEl(null);
     setOpenDeleteModal(false);
   };

@@ -12,7 +12,7 @@ import App from './app';
 import { buildAppRoutes } from './utils/routes';
 import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Dashboard/profile/Profile';
 import DataTable from './components/DataTables/DataTable';
@@ -20,6 +20,24 @@ import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from "./utils/ProtectedRoute";
+
+
+// const ProtectedRoute = ({ component: Component, ...rest }) => (
+//   <Route
+//     {...rest}
+//     render={(props) => {
+//       console.log('Checking token:', localStorage.getItem('userToken'));
+//       if (localStorage.getItem('userToken')) {
+//         console.log('Token present. Rendering component.');
+//         return <Component {...props} />;
+//       } else {
+//         console.log('Token not present. Redirecting to login.');
+//         return <Redirect to="/login" />;
+//       }
+//     }}
+//   />
+// );
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -30,17 +48,18 @@ const Root = () => (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Router history={history}>
+          {/* <Switch> */}
           <Route path="/login" component={Login} exact />
-          <Redirect from="/" to="/login" />
           <Route path="/register" component={Signup} />
-          <Route path="/dashboard" component={Dashboard}>
-            <Route path="/dashboard/profile" component={Profile} />
-            <Route path="/dashboard/datasets" component={DataTable} />
-            <Route path="/dashboard/users" component={DataTable} />
-          </Route>
-          <Route path="/directions" component={App} >
+          <ProtectedRoute path="/dashboard" component={Dashboard} />
+          <ProtectedRoute path="/dashboard/profile" component={Profile} />
+          <ProtectedRoute path="/dashboard/datasets" component={DataTable} />
+          <ProtectedRoute path="/dashboard/users" component={DataTable} />
+          <Redirect from="/" to={"/login"} />
+          <ProtectedRoute path="/directions" component={App}>
             {appRoute}
-          </Route>
+          </ProtectedRoute>
+          {/* </Switch> */}
         </Router>
         <ToastContainer
           position="top-right"

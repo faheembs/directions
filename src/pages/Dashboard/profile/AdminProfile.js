@@ -10,6 +10,7 @@ import AppBarComponent from "../../components/AppBarComponent";
 import Profile from "./Profile";
 import { Typography } from "@mui/material";
 import AdminSideBar from "../AdminSideBar";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -21,7 +22,6 @@ function AdminProfile(props) {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
     const container =
         window !== undefined ? () => window().document.body : undefined;
 

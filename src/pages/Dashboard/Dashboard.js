@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import AdminSideBar from "./AdminSideBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
@@ -27,17 +27,21 @@ function Dashboard(props) {
     const [onlineStatus, setOnlineStatus] = useState(false);
     const location = useLocation();
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const mainRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
     const userRoute = location.pathname === '/dashboard/users'
     const profileRoute = location.pathname === '/dashboard/profile'
 
 
+
     useEffect(() => {
 
+
+
+        console.log("yes")
         const user = localStorage.getItem('usersInfo')
 
         const users = JSON.parse(user)
-        console.log('user id from local', users._id)
         const socket = io(socketBaseURL);
         socket.on("message", (message) => {
             console.log("Received message from server:", message);
@@ -50,19 +54,18 @@ function Dashboard(props) {
         });
         socket.on('userOnlineStatus', (userId, online) => {
             setOnlineStatus(online);
-            if (users.role === "admin") { dispatch(getAllUsers({})) }
+            if (users?.role === "admin") { dispatch(getAllUsers({})) }
             console.log("online status changed")
 
         })
-        socket.emit("login", users._id);
+        socket.emit("login", users?._id);
         dispatch(getAllUsers({}));
         const handleDisconnect = () => {
-            socket.emit('disconnectRequest', users._id);
+            socket.emit('disconnectRequest', users?._id);
             socket.disconnect();
         };
 
         if (typeof window !== 'undefined') {
-            // Add event listener for beforeunload event
             window.addEventListener('beforeunload', handleDisconnect);
         }
 
@@ -162,7 +165,7 @@ function Dashboard(props) {
                 }}
             >
                 <Box>
-                    {mainRoute ? <DataTable /> : profileRoute ? <Profile /> : userRoute ? <DataTable /> : 'Welcome'}
+                    {mainRoute ? <DataTable /> : profileRoute ? <Profile /> : userRoute ? <DataTable /> : ''}
                 </Box>
             </Box>
         </Box>
