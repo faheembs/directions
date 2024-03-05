@@ -86,11 +86,11 @@ export const DataTable = () => {
         const userData = localStorage.getItem('usersInfo');
         const usersData = JSON.parse(userData);
         const userToken = localStorage.getItem('userToken');
-        if (!userToken) {
-            console.log("no")
-            navigate("/login")
-            window.reload()
-        }
+        // if (!userToken) {
+        //     console.log("no")
+        //     navigate("/login")
+        //     window.reload()
+        // }
         if (userToken && usersData?.role === 'admin') {
             dispatch(getAllDatasets({}));
             dispatch(getAllUsers({}));

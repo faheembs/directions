@@ -38,7 +38,7 @@ function Dashboard(props) {
 
 
 
-        console.log("yes")
+        // console.log("yes")
         const user = localStorage.getItem('usersInfo')
 
         const users = JSON.parse(user)

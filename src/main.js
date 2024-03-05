@@ -38,6 +38,14 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 //     }}
 //   />
 // );
+// const userToken = localStorage.getItem('userToken');
+// console.log(userToken)
+// if (!userToken) {
+//   console.log("no")
+//   browserHistory.push("/login")
+//   // navigate("/login")
+//   // window.reload()
+// }
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -48,18 +56,17 @@ const Root = () => (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Router history={history}>
-          {/* <Switch> */}
-          <Route path="/login" component={Login} exact />
+          <Route path="/login" component={() => (<ProtectedRoute><Login /></ProtectedRoute>)} exact />
           <Route path="/register" component={Signup} />
-          <ProtectedRoute path="/dashboard" component={Dashboard} />
-          <ProtectedRoute path="/dashboard/profile" component={Profile} />
-          <ProtectedRoute path="/dashboard/datasets" component={DataTable} />
-          <ProtectedRoute path="/dashboard/users" component={DataTable} />
+          <Route path="/dashboard" component={() => (<ProtectedRoute><Dashboard /></ProtectedRoute>)} />
+          <ProtectedRoute path="/dashboard/profile" component={() => (<ProtectedRoute><Profile /></ProtectedRoute>)} />
+          <ProtectedRoute path="/dashboard/datasets" component={() => (<ProtectedRoute><DataTable /></ProtectedRoute>)} />
+          <ProtectedRoute path="/dashboard/users" component={() => (<ProtectedRoute><DataTable /></ProtectedRoute>)} />
           <Redirect from="/" to={"/login"} />
-          <ProtectedRoute path="/directions" component={App}>
+          {/* <Route path="/directions" component={() => (<ProtectedRoute><App /></ProtectedRoute>)}> */}
+          <Route path="/directions" component={App}>
             {appRoute}
-          </ProtectedRoute>
-          {/* </Switch> */}
+          </Route>
         </Router>
         <ToastContainer
           position="top-right"

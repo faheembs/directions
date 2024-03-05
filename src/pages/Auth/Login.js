@@ -1,24 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Card, Grid, Link, TextField, Typography } from "@mui/material";
 import { styles } from "../../utils/styles/styles";
 import logo from '../../assets/Slide1.png';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 import animation from '../../assets/animation2.mov'
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../features/Authentication/AuthActions";
 import { toast } from "react-toastify";
+import { browserHistory } from 'react-router';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch()
+  // const location = useLocation()
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Email is required"),
     password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
   });
+
+  // useEffect(() => {
+  //   const userToken = localStorage.getItem('userToken');
+  //   if (userToken && location.pathname === '/login') {
+  //     console.log(location.pathname)
+  //     navigate(-1)
+  //     window.relaod()
+  //   } else {
+  //     console.log("no token", location.pathname)
+
+  //   }
+  // }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -33,10 +47,12 @@ const Login = () => {
       console.log("response --- ", response)
       if (response.payload !== 'Incorrect password') {
         toast.success("Login succesfully")
-        navigate('/directions');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000)
+        browserHistory.push("/directions")
+        // navigate('/dashboard');
+        // navigate('/directions');
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1000)
       } else {
         toast.error(response.payload)
       }

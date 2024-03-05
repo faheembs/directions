@@ -130,12 +130,12 @@ const App = (props) => {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem('userToken')
-    if (!token) {
-      navigate("/login")
-      window.reload()
+    // const token = localStorage.getItem('userToken')
+    // if (!token) {
+    //   navigate("/login")
+    //   window.reload()
 
-    }
+    // }
     const user = localStorage.getItem('usersInfo')
 
     const users = JSON.parse(user)
