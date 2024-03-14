@@ -48,6 +48,7 @@ const Login = () => {
       if (response.payload !== 'Incorrect password') {
         toast.success("Login succesfully")
         browserHistory.push("/directions")
+        window.location.reload();
         // navigate('/dashboard');
         // navigate('/directions');
         // setTimeout(() => {
