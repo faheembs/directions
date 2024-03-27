@@ -3,7 +3,6 @@ import { Route, Redirect, browserHistory } from 'react-router';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, ...rest }) => {
-  console.log("protected route")
   const location = useLocation()
   const navigate = useNavigate();
   // // console.log(userToken)
@@ -24,8 +23,8 @@ const ProtectedRoute = ({ children, ...rest }) => {
     if (!userToken) {
       browserHistory.push("/login")
     } else if (userToken && location.pathname === "/login") {
-      browserHistory.goBack();
-      // browserHistory.push("/dashboard")
+      browserHistory.push("/directions")
+      // browserHistory.goBack();
     }
     // console.log("yes")
 

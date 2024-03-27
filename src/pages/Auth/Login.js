@@ -44,16 +44,16 @@ const Login = () => {
       const { email, password } = values;
 
       const response = await dispatch(userLogin({ email: email, password: password }))
-      console.log("response --- ", response)
       if (response.payload !== 'Incorrect password') {
         toast.success("Login succesfully")
         browserHistory.push("/directions")
         window.location.reload();
         // navigate('/dashboard');
         // navigate('/directions');
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1000)
+        setTimeout(() => {
+          browserHistory.push("/directions")
+        }, 1000)
+        window.location.reload();
       } else {
         toast.error(response.payload)
       }

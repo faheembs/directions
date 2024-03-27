@@ -212,8 +212,8 @@ function loadRemoteSampleMap(options) {
     Promise.all([loadRemoteConfig(configUrl), loadRemoteData(dataUrl)]).then(
       ([config, data]) => {
         // TODO: these two actions can be merged
-        console.log("config", config, data)
-        console.log("options", options)
+        // console.log("config", config, data)
+        // console.log("options", options)
         dispatch(loadRemoteResourceSuccess(data, config, options));
         dispatch(toggleModal(null));
       },

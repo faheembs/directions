@@ -8,7 +8,7 @@ import { format } from 'd3-format';
 import { LoadingDialog } from '@kepler.gl/components';
 import { FormattedMessage } from 'react-intl';
 import Modal from 'react-modal';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import sampleImage from "../../assets/sfcontour.png"
 
 const numFormat = format(',');
@@ -131,9 +131,9 @@ const SampleMap = ({ id, sample, onClick, locale }) => {
     setIsModalOpen(true);
   };
 
-  const filteredDataset = userData.premiumDatasets.filter((dataset) => dataset._id === sample._id)
+  const filteredDataset = userData?.premiumDatasets?.filter((dataset) => dataset._id === sample._id)
   const isSampleInPremiumDatasets = filteredDataset.length > 0;
-  console.log("filteredDataset", isSampleInPremiumDatasets)
+  // console.log("filteredDataset", isSampleInPremiumDatasets)
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -144,23 +144,22 @@ const SampleMap = ({ id, sample, onClick, locale }) => {
       <StyledSampleMap id={id} className="sample-map-gallery__item">
         <div className="sample-map">
           <div className="sample-map__image" onClick={isSampleInPremiumDatasets ? openModal : onClick}>
-            {console.log("sample image", sample.image)}
-            {<img src={sample.image.includes("http") ? sample.image : sampleImage} />}
-            {sample.isPremium ? (
+            {<img src={sample?.image && sample?.image?.includes("http") ? sample?.image : sampleImage} />}
+            {sample?.isPremium ? (
               <div className="badge premium">Premium</div>
             ) : (
               <div className="badge free">Free</div>
             )}
           </div>
-          <div className="sample-map__title">{sample.label}</div>
+          <div className="sample-map__title">{sample?.label}</div>
           <div className="sample-map__size">
             <FormattedMessage
               id={'sampleDataViewer.rowCount'}
-              values={{ rowCount: numFormat(sample.size) }}
+              values={{ rowCount: numFormat(sample?.size) }}
             />
           </div>
           <StyledImageCaption className="sample-map__image__caption">
-            {sample.description}
+            {sample?.description}
           </StyledImageCaption>
         </div>
       </StyledSampleMap>
@@ -236,7 +235,7 @@ const SampleMapGallery = ({
         <LoadingDialog size={64} />
       ) : (
         <StyledSampleGallery className="sample-map-gallery">
-          {sampleMaps
+          {sampleMaps ? sampleMaps
             .filter(sp => sp.visible)
             .map(sp => (
               <SampleMap
@@ -246,7 +245,7 @@ const SampleMapGallery = ({
                 onClick={() => onLoadSample(sp)}
                 locale={locale}
               />
-            ))}
+            )) : <Typography variant='body1'>No Sample Datasets available</Typography>}
         </StyledSampleGallery>
       )}
     </div>

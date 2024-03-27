@@ -35,27 +35,17 @@ function Dashboard(props) {
 
 
     useEffect(() => {
-
-
-
-        // console.log("yes")
         const user = localStorage.getItem('usersInfo')
 
         const users = JSON.parse(user)
         const socket = io(socketBaseURL);
         socket.on("message", (message) => {
-            console.log("Received message from server:", message);
-            // console.log("userId from table", params)
-            // socket.on("userOnlineStatus", ({ userId, online }) => {
-            //   // const statusMessage = online ? "Online" : "Offline";
-            //   console.log(`User ${userId} is ${statusMessage}`)
-            // });
+
 
         });
         socket.on('userOnlineStatus', (userId, online) => {
             setOnlineStatus(online);
             if (users?.role === "admin") { dispatch(getAllUsers({})) }
-            console.log("online status changed")
 
         })
         socket.emit("login", users?._id);
@@ -165,7 +155,7 @@ function Dashboard(props) {
                 }}
             >
                 <Box>
-                    {mainRoute ? <DataTable /> : profileRoute ? <Profile /> : userRoute ? <DataTable /> : ''}
+                    {mainRoute ? <DataTable /> : profileRoute ? <Profile /> : userRoute ? <DataTable /> : <DataTable />}
                 </Box>
             </Box>
         </Box>

@@ -4,18 +4,20 @@ import { BUG_REPORT_LINK, USER_GUIDE_DOC } from '@kepler.gl/constants';
 import logo from "../assets/Slide1-removebg.png"
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { browserHistory } from 'react-router';
+
 export function CustomPanelHeaderFactory(...deps) {
   const PanelHeader = PanelHeaderFactory(...deps);
 
   const defaultActionItems = PanelHeader.defaultProps.actionItems;
 
-  console.log('Default Action Items (Before Customization):', defaultActionItems);
   const CustomHeader = () => {
 
     const navigate = useNavigate()
     const handleNaviagteToDashboard = () => {
-      navigate('/dashboard')
-      window.location.reload()
+      // navigate('/dashboard')
+      // window.location.reload()
+      browserHistory.push('/dashboard')
     }
     return (
       <Box sx={{ mt: '-38px', width: '95%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -69,7 +71,6 @@ export function CustomPanelHeaderFactory(...deps) {
 
   };
 
-  console.log('Default Action Items (After Customization):', PanelHeader.defaultProps.actionItems);
 
   return PanelHeader;
 }

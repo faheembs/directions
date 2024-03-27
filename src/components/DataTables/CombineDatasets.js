@@ -57,6 +57,9 @@ const CombineDatasets = ({ combineModal, setCombineModal }) => {
     const dispatch = useDispatch();
     const { allDatasets, combineDatasetLoading } = useSelector((state) => state.dataset);
 
+    const userData = localStorage.getItem('usersInfo');
+    const usersData = JSON.parse(userData);
+
     useEffect(() => {
         dispatch(getAllDatasets())
         setOpen(combineModal)
@@ -78,8 +81,8 @@ const CombineDatasets = ({ combineModal, setCombineModal }) => {
     };
 
     const handleCombiningDatasets = async () => {
-        await dispatch(createCombineDataset({ name: name, dataset1: selectedDatasetIds[0], dataset2: selectedDatasetIds[1] }));
-        // dispatch(getAllUsers({}));
+        await dispatch(createCombineDataset({ body: { name: name, dataset1: selectedDatasetIds[0], dataset2: selectedDatasetIds[1] }, userId: usersData?.id }));
+        dispatch(getAllDatasets({}));
         handleClose();
     }
 
@@ -98,56 +101,58 @@ const CombineDatasets = ({ combineModal, setCombineModal }) => {
                             <CloseIcon />
                         </IconButton>
                     </Box>
-                    <Box>
-                        <TextField
-                            variant="outlined"
-                            placeholder='Title'
-                            value={name}
-                            onChange={handleNameChange}
-                            sx={{
-                                my: 2, width: '100%',
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: '10px',
-                                    "& .MuiOutlinedInput-input": {
-                                        fontSize: "16px",
-                                        height: "15px",
-                                        borderColor: "#ececec",
+                    {allDatasets.length < 1 ?
+                        <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center' }}>No Datasets are available to combine!</Typography>
+                        : <Box>
+                            <TextField
+                                variant="outlined"
+                                placeholder='Title'
+                                value={name}
+                                onChange={handleNameChange}
+                                sx={{
+                                    my: 2, width: '100%',
+                                    "& .MuiOutlinedInput-root": {
+                                        borderRadius: '10px',
+                                        "& .MuiOutlinedInput-input": {
+                                            fontSize: "16px",
+                                            height: "15px",
+                                            borderColor: "#ececec",
+                                        },
                                     },
-                                },
-                            }}
-                        />
+                                }}
+                            />
 
-                        <List sx={{ border: '1px solid #ccc', borderRadius: 4 }}>
-                            {allDatasets.map(dataset => (
-                                <ListItem key={dataset._id}>
-                                    <ListItemText primary={dataset.label} />
-                                    <ListItemSecondaryAction>
-                                        <Checkbox
-                                            checked={selectedDatasetIds.includes(dataset._id)}
+                            <List sx={{ border: '1px solid #ccc', borderRadius: 4 }}>
+                                {allDatasets.map(dataset => (
+                                    <ListItem key={dataset._id}>
+                                        <ListItemText primary={dataset.label} />
+                                        <ListItemSecondaryAction>
+                                            <Checkbox
+                                                checked={selectedDatasetIds.includes(dataset._id)}
 
-                                            onChange={(event) => handleCheckboxChange(dataset._id, event.target.checked)}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            ))}
-                        </List>
+                                                onChange={(event) => handleCheckboxChange(dataset._id, event.target.checked)}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                ))}
+                            </List>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                            <Button variant="outlined" sx={{
-                                borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
-                                    color: 'black',
-                                    backgroundColor: 'white',
-                                    borderColor: 'black'
-                                },
-                                my: 2, px: 2
-                            }}
-                                onClick={handleCombiningDatasets}
-                            >
-                                Combine Dataset
-                            </Button>
-                        </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                <Button variant="outlined" sx={{
+                                    borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+                                        color: 'black',
+                                        backgroundColor: 'white',
+                                        borderColor: 'black'
+                                    },
+                                    my: 2, px: 2
+                                }}
+                                    onClick={handleCombiningDatasets}
+                                >
+                                    Combine Dataset
+                                </Button>
+                            </Box>
 
-                    </Box>
+                        </Box>}
                 </Box>
                 <Modal open={combineDatasetLoading === true} onClose={() => combineDatasetLoading === false} sx={customStyles}>
                     <Box sx={secondModalStyle}>

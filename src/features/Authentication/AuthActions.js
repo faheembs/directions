@@ -50,7 +50,6 @@ export const userRegister = createAsyncThunk(
       });
       if (response) {
         const responseData = await response.json();
-        console.log("try", responseData)
         if (responseData.response) {
           return responseData;
         } else {
@@ -58,7 +57,6 @@ export const userRegister = createAsyncThunk(
         }
       }
     } catch (error) {
-      console.log("catch", error)
       if (error.response) {
 
         return rejectWithValue(error?.response?.data?.error?.message);

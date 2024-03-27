@@ -2,8 +2,7 @@
 // Copyright contributors to the kepler.gl project
 
 import FSQIcon from './foursquare-icon';
-import {Provider, KEPLER_FORMAT} from '@kepler.gl/cloud-providers';
-import {Auth0Client} from '@auth0/auth0-spa-js';
+import { Provider, KEPLER_FORMAT } from '@kepler.gl/cloud-providers';
 
 const NAME = 'foursquare';
 const DISPLAY_NAME = 'Foursquare';
@@ -37,28 +36,20 @@ function convertFSQModelToMapItem(model, baseApi) {
 
 function extractMapFromFSQResponse(response) {
   const {
-    latestState: {data}
+    latestState: { data }
   } = response;
   return data;
 }
 
 export default class FoursquareProvider extends Provider {
-  constructor({clientId, authDomain, apiURL, userMapsURL}) {
-    super({name: NAME, displayName: DISPLAY_NAME, icon: FSQIcon});
+  constructor({ clientId, authDomain, apiURL, userMapsURL }) {
+    super({ name: NAME, displayName: DISPLAY_NAME, icon: FSQIcon });
     this.icon = FSQIcon;
     this.appName = APP_NAME;
     this.apiURL = apiURL;
 
-    this._auth0 = new Auth0Client({
-      domain: authDomain,
-      clientId: clientId,
-      scope: FOURSQUARE_AUTH_SCOPE,
-      authorizationParams: {
-        redirect_uri: window.location.origin,
-        audience: FOURSQUARE_AUTH_AUDIENCE
-      },
-      cacheLocation: 'localstorage'
-    });
+
+    this._auth0 = null;
 
     // the domain needs to be passed as input param
     this._folderLink = userMapsURL;
@@ -84,13 +75,13 @@ export default class FoursquareProvider extends Provider {
     });
   }
 
-  async uploadMap({mapData, options = {}}) {
+  async uploadMap({ mapData, options = {} }) {
     // TODO: handle replace
     const mode = options.overwrite ? 'overwrite' : 'add';
     const method = options.overwrite ? 'PUT' : 'POST';
-    const {map, thumbnail} = mapData;
+    const { map, thumbnail } = mapData;
 
-    const {title = '', description = '', id} = map.info;
+    const { title = '', description = '', id } = map.info;
     const headers = await this.getHeaders();
     const payload = {
       name: title,
@@ -139,7 +130,7 @@ export default class FoursquareProvider extends Provider {
   }
 
   async downloadMap(loadParams) {
-    const {id} = loadParams;
+    const { id } = loadParams;
     if (!id) {
       return Promise.reject('No Map is was provider as part of loadParams');
     }
@@ -159,7 +150,7 @@ export default class FoursquareProvider extends Provider {
   }
 
   getMapUrl(loadParams) {
-    const {id} = loadParams;
+    const { id } = loadParams;
     return `${this.apiURL}/v1/maps/${id}`;
   }
 

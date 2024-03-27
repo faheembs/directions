@@ -13,7 +13,6 @@ export const getAllDatasets = createAsyncThunk(
             const response = await fetch(`${baseURL}dataset/getAll`);
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error in getting all datasets")
@@ -32,7 +31,6 @@ export const getDatasetsByUserId = createAsyncThunk(
             const response = await fetch(`${baseURL}users/${userId}/datasets`);
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error in getting all datasets")
@@ -74,7 +72,6 @@ export const updateIsPremium = createAsyncThunk(
 export const createDataset = createAsyncThunk(
     "dataset/create",
     async (formDataToSend, { rejectWithValue }) => {
-        console.log("form data action ---->", formDataToSend)
         try {
 
             var form_data = new FormData();
@@ -103,7 +100,6 @@ export const createDataset = createAsyncThunk(
             });
             if (response) {
                 const responseData = await response.json();
-                console.log("try", responseData)
                 if (responseData.data) {
                     toast.success("Dataset has been created")
                     return responseData;
@@ -113,7 +109,6 @@ export const createDataset = createAsyncThunk(
                 }
             }
         } catch (error) {
-            console.log("catch", error)
             if (error.response) {
 
                 return rejectWithValue(error?.response?.data?.error?.message);
@@ -127,7 +122,6 @@ export const createDataset = createAsyncThunk(
 export const deleteDataset = createAsyncThunk(
     "dataset/delete",
     async (datasetId, { rejectWithValue }) => {
-        console.log('datasetId', datasetId)
         try {
             const response = await fetch(`${baseURL}dataset/${datasetId}/delete`, {
                 method: "DELETE",
@@ -152,20 +146,18 @@ export const deleteDataset = createAsyncThunk(
 
 export const createCombineDataset = createAsyncThunk(
     "dataset/combine",
-    async (body, { rejectWithValue }) => {
-        console.log("combine-body  ---->", body)
+    async (data, { rejectWithValue }) => {
         try {
 
-            const response = await fetch(`${baseURL}combinedDatasets/createCombined`, {
+            const response = await fetch(`${baseURL}combinedDatasets/${data.userId}/createCombined`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(body),
+                body: JSON.stringify(data.body),
             });
             if (response) {
                 const responseData = await response.json();
-                console.log("try", responseData)
                 if (responseData.data) {
                     toast.success("Dataset is combined")
                     return responseData;
@@ -175,7 +167,6 @@ export const createCombineDataset = createAsyncThunk(
                 }
             }
         } catch (error) {
-            console.log("catch", error)
             if (error.response) {
 
                 return rejectWithValue(error?.response?.data?.error?.message);
@@ -193,7 +184,6 @@ export const getAllCombinedDatasets = createAsyncThunk(
             const response = await fetch(`${baseURL}combinedDatasets/get-all`);
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error in getting all combined datasets")

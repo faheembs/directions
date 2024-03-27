@@ -9,6 +9,8 @@ import logo from "../../assets/Slide1.png";
 import { useLocation, useNavigate } from "react-router-dom";
 // import jsonRoutes from "../constants/routes.json"
 import { useDispatch } from "react-redux";
+import { browserHistory } from 'react-router';
+
 // import { userLogout } from "../features/auth/authActions";
 
 function stringAvatar(name) {
@@ -40,20 +42,24 @@ function Header({ screenName }) {
 
     const handleProfileClick = () => {
         handleMenuClose();
-        navigate("/dashboard/profile")
+        browserHistory.push("/dashboard/profile")
+        // navigate("/dashboard/profile")
     };
 
     const handleLogoutClick = async () => {
         // await dispatch(userLogout());
-        navigate('/login')
+        // navigate('/login')
+        browserHistory.push('/login')
+
         localStorage.removeItem("usersInfo");
         localStorage.removeItem("userToken");
         window.location.reload()
 
     };
     const handlenavigateToMap = () => {
-        navigate('/directions')
-        window.location.reload()
+        // navigate('/directions')
+        browserHistory.push('/directions')
+        // window.location.reload()
     }
     return (
         <>

@@ -8,10 +8,14 @@ import SampleMapGallery from '../components/load-data-modal/sample-data-viewer';
 import LoadRemoteMap from '../components/load-data-modal/load-remote-map';
 import SampleMapsTab from '../components/load-data-modal/sample-maps-tab';
 import { loadRemoteMap, loadSample, loadSampleConfigurations } from '../actions';
+import DisabledTab from '../components/load-data-modal/disabledTab';
+const user = localStorage.getItem('usersInfo')
+const users = JSON.parse(user)
 
 const CustomLoadDataModalFactory = (...deps) => {
   const LoadDataModal = LoadDataModalFactory(...deps);
   const defaultLoadingMethods = LoadDataModal.defaultProps.loadingMethods;
+  console.log('LoadDataModalFactory', LoadDataModal.defaultProps)
   const additionalMethods = {
     remote: {
       id: LOADING_METHODS.remote,
@@ -29,8 +33,11 @@ const CustomLoadDataModalFactory = (...deps) => {
       label: 'modal.loadData.directions',
       elementType: SampleMapGallery,
       // tabElementType: SampleMapsTab
-
-
+    },
+    disabledTab: {
+      id: LOADING_METHODS.disabled,
+      label: 'modal.loadData.disabled',
+      elementType: DisabledTab,
     }
   };
 
@@ -38,9 +45,10 @@ const CustomLoadDataModalFactory = (...deps) => {
   LoadDataModal.defaultProps = {
     ...LoadDataModal.defaultProps,
     loadingMethods: [
-      defaultLoadingMethods.find(lm => lm.id === 'upload'),
-      additionalMethods.remote,
-      defaultLoadingMethods.find(lm => lm.id === 'storage'),
+      users?.allowExportData ? defaultLoadingMethods.find(lm => lm.id === 'upload') : additionalMethods.disabledTab,
+      // defaultLoadingMethods.find(lm => lm.id === 'upload'),
+      // additionalMethods.remote,
+      // defaultLoadingMethods.find(lm => lm.id === 'storage'),
       additionalMethods.tryDirectionSample,
 
     ]

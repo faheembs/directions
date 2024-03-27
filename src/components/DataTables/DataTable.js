@@ -72,6 +72,31 @@ export const DataTable = () => {
         configFile: useRef(null),
         imageFile: useRef(null),
     };
+    const [searchQuery, setSearchQuery] = useState('');
+    // const [filteredRows, setFilteredRows] = useState([]);
+
+    // const handleSearchInputChange = (e) => {
+    //     setSearchQuery(e.target.value);
+    //     filterRows(e.target.value);
+    // };
+
+    // // Function to filter rows based on search query
+    // const filterRows = (query) => {
+    //     if (query.trim() === '') {
+    //         setFilteredRows([]);
+    //         return;
+    //     }
+
+    //     const filtered = customRows.filter(row =>
+    //         row.firstname.toLowerCase().includes(query.toLowerCase()) ||
+    //         row.lastname.toLowerCase().includes(query.toLowerCase()) ||
+    //         row.email.toLowerCase().includes(query.toLowerCase())
+    //     );
+    //     setFilteredRows(filtered);
+    // };
+
+    // Use filteredRows if searchQuery is not empty, otherwise use customRows
+    // const rowsToDisplay = searchQuery.trim() !== '' ? filteredRows : customRows;
 
     const dispatch = useDispatch()
     const datasetRoute = location.pathname === '/dashboard/datasets' || location.pathname === '/dashboard';
@@ -86,11 +111,6 @@ export const DataTable = () => {
         const userData = localStorage.getItem('usersInfo');
         const usersData = JSON.parse(userData);
         const userToken = localStorage.getItem('userToken');
-        // if (!userToken) {
-        //     console.log("no")
-        //     navigate("/login")
-        //     window.reload()
-        // }
         if (userToken && usersData?.role === 'admin') {
             dispatch(getAllDatasets({}));
             dispatch(getAllUsers({}));
@@ -100,15 +120,10 @@ export const DataTable = () => {
         const user = localStorage.getItem('usersInfo')
 
         const users = JSON.parse(user)
-        // console.log('user id from local', users?._id)
         const socket = io(socketBaseURL);
         socket.on("message", (message) => {
             console.log("Received message from server:", message);
-            // console.log("userId from table", params)
-            // socket.on("userOnlineStatus", ({ userId, online }) => {
-            //   // const statusMessage = online ? "Online" : "Offline";
-            //   console.log(`User ${userId} is ${statusMessage}`)
-            // });
+
 
         });
 
@@ -127,7 +142,7 @@ export const DataTable = () => {
     }, []);
 
 
-    const { allDatasets, datasetById, loading, combineDatasetLoading } = useSelector((state) => state.dataset)
+    const { allDatasets, datasetById, loading } = useSelector((state) => state.dataset)
     const { allUsers, isLoading } = useSelector((state) => state.users)
 
 
@@ -195,14 +210,38 @@ export const DataTable = () => {
         }
     };
     const datasets = users?.role === "admin" ? allDatasets : datasetById;
-    const datasetRows = datasets ? datasets?.map((dataset) => (
+    // console.log('datasets', datasets)
+    const datasetRows = datasets ? datasets.filter((dataset) => {
+        const lowerCaseSearchQuery = searchQuery.toLowerCase();
+        return (
+            (dataset.label && dataset?.label.toLowerCase().includes(lowerCaseSearchQuery))
+        );
+    }).map((dataset) => {
+        const formattedDate = new Date(dataset.createdAt).toLocaleDateString('en-GB');
+        return {
+            id: dataset?._id,
+            name: dataset?.label,
+            isCombined: dataset?.combinedDataset,
+            createdAt: formattedDate,
+            addedBy: dataset?.addedBy?.firstName + ' ' + dataset?.addedBy?.lastName,
+            ownerEmail: dataset?.addedBy?.email,
+            status: dataset?.isPremium
+        };
+    }) : [];
+    // console.log("data set row", datasetRows.length)
 
-        { id: dataset._id, name: dataset.label, description: dataset.description, status: dataset.isPremium }
-    )) : [];
-    console.log("data set row", datasetRows)
+    const userRows = Array.isArray(allUsers) && searchQuery !== '' ? allUsers.filter((user) => {
+        const lowerCaseSearchQuery = searchQuery
 
-    const userRows = Array.isArray(allUsers) ? allUsers.map((user) => {
-        const formattedDate = new Date(user?.createdAt).toLocaleDateString('en-GB');
+        return (
+            (user.firstName && user.firstName.toLowerCase().includes(lowerCaseSearchQuery)) ||
+            (user.lastName && user.lastName.toLowerCase().includes(lowerCaseSearchQuery))
+            // (user.email && user.email.toLowerCase().includes(lowerCaseSearchQuery))
+
+        );
+
+    }).map((user) => {
+        const formattedDate = new Date(user.createdAt).toLocaleDateString('en-GB');
 
         return {
             id: user?._id,
@@ -211,11 +250,27 @@ export const DataTable = () => {
             lastname: user?.lastName,
             email: user?.email,
             premiumDatasets: user?.premiumDatasets,
-            online: user?.online
-
+            online: user?.online,
+            combineDatasetPermission: user?.allowCombineDatasets,
+            exportPermission: user?.allowExportData
         };
-    }) : [];
+    })
+        : Array.isArray(allUsers) ? allUsers.map((user) => {
+            const formattedDate = new Date(user?.createdAt).toLocaleDateString('en-GB');
 
+            return {
+                id: user?._id,
+                createdAt: formattedDate,
+                firstname: user?.firstName,
+                lastname: user?.lastName,
+                email: user?.email,
+                premiumDatasets: user?.premiumDatasets,
+                online: user?.online,
+                combineDatasetPermission: user?.allowCombineDatasets,
+                exportPermission: user?.allowExportData
+            };
+        }) : []
+    console.log('userRows', userRows)
     const customRows = userRoute ? userRows : datasetRows;
     const customColumns = userRoute ? userColumns : datasetColumns;
 
@@ -226,7 +281,7 @@ export const DataTable = () => {
             label: formData.title,
             queryType: "sample",
             description: formData.description,
-            detail: "Details for sample",
+            detail: "Details for Dataset",
             size: 1023,
             visible: true,
             isPremium: formData.status,
@@ -243,67 +298,99 @@ export const DataTable = () => {
         setUploadedDataFiles([]);
         setUploadedConfigFiles([]);
         setUploadedImageFiles([]);
-
+        dispatch(getAllDatasets({}))
         dispatch(getDatasetsByUserId({ userId: usersData?._id }));
     };
+    // const handleFilterModelChange = (filterModel) => {
+    //     const searchQuery = filterModel.items[0]?.value || '';
+    //     setSearchQuery(searchQuery);
+    // };
 
+    console.log(searchQuery)
+    // const filteredRows = datasetRoute ? customRows.filter(row =>
+    //     (row.firstname && row.firstname.toLowerCase().includes(searchQuery.toLowerCase()))
+    // ) : customRows;
     return (
         <>
+            {userRoute && <TextField
+                variant="outlined"
+                placeholder="Search"
+                size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            // sx={{ mb: 2 }}
+            />}
             {datasetRoute ? (
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        borderRadius: 1,
-                        textTransform: 'none',
-                    }}
-                >
-                    {/* <Box sx={{
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} >
+                    <TextField
+                        variant="outlined"
+                        placeholder="Search"
+                        size="small"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    // sx={{ mb: 2 }}
+                    />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            borderRadius: 1,
+                            textTransform: 'none',
+                        }}
+                    >
+                        {/* <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         borderRadius: 1,
                         textTransform: 'none',
                     }}> */}
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            borderColor: 'black',
-                            backgroundColor: 'white',
-                            mr: 2,
-                            color: 'black',
-                            '&:hover': {
-                                color: 'white',
-                                backgroundColor: 'black',
+                        <Button
+                            variant="outlined"
+                            disabled={!users?.allowCombineDatasets}
+                            sx={{
                                 borderColor: 'black',
-                            },
-                        }}
-                        onClick={handleCombineOpenModal}
-                    >
-                        Combine Dataset
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        sx={{
-                            borderColor: 'black',
-                            backgroundColor: 'black',
-                            color: 'white',
-                            '&:hover': {
-                                color: 'black',
                                 backgroundColor: 'white',
+                                mr: 2,
+                                color: 'black',
+                                '&:hover': {
+                                    color: 'white',
+                                    backgroundColor: 'black',
+                                    borderColor: 'black',
+                                },
+                            }}
+                            onClick={handleCombineOpenModal}
+                        >
+                            Combine Dataset
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            sx={{
                                 borderColor: 'black',
-                            },
-                        }}
-                        onClick={handleOpenModal}
-                    >
-                        Add Dataset
-                    </Button>
-                    {/* </Box> */}
+                                backgroundColor: 'black',
+                                color: 'white',
+                                '&:hover': {
+                                    color: 'black',
+                                    backgroundColor: 'white',
+                                    borderColor: 'black',
+                                },
+                            }}
+                            onClick={handleOpenModal}
+                        >
+                            Add Dataset
+                        </Button>
+                        {/* </Box> */}
+                    </Box>
                 </Box>
             ) : null}
             {loading == true || isLoading == true ?
                 <Box sx={{ display: 'flex', width: "100%", height: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: "11px", left: 0 }}>
                     <CircularProgress sx={{ ml: '250px', color: 'black' }} />
                 </Box>
+                //: datasetRoute && datasetRows.length < 1 ?
+                //  <Box>
+                //   <Typography variant='h6' sx={{ display: 'flex', justifyContent: 'center' }} >No Datasets available!</Typography>
+                // </Box>
+
                 : <Box
                     sx={{
                         '& .MuiDataGrid-root': {
@@ -314,10 +401,16 @@ export const DataTable = () => {
                         '& .MuiDataGrid-columnHeaders': {
                             backgroundColor: '#F1F4F8',
                             borderRadius: '12px 12px 0 0',
+
                         },
                         '& .super-app-theme--cell': {
                             fontSize: 14,
                             fontWeight: 500,
+                        },
+                        '& .custom-header': {
+                            display: 'flex',
+                            justifyContent: 'center',
+                            // ml: 1
                         },
                         '& .super-app-theme-cell': {
                             fontSize: 14,
@@ -338,6 +431,7 @@ export const DataTable = () => {
                                 paginationModel: { pageSize: 8, page: 0 },
                             },
                         }}
+
                         hideFooterSelectedRowCount
 
                     />

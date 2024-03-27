@@ -16,7 +16,6 @@ export const getAllUsers = createAsyncThunk(
             });
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error in getting all user's data")
@@ -32,7 +31,6 @@ export const editUser = createAsyncThunk(
     "users/edit",
     async (data, { rejectWithValue }) => {
         try {
-            console.log(data)
             const response = await fetch(`${baseURL}users/${data.userId}`, {
                 method: "PUT",
                 headers: {
@@ -45,7 +43,6 @@ export const editUser = createAsyncThunk(
             if (response.ok) {
                 const responseData = await response.json();
                 localStorage.setItem("usersInfo", JSON.stringify(responseData.data));
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error while updating the profile")
@@ -61,9 +58,7 @@ export const editUser = createAsyncThunk(
 export const addPremiumDatasets = createAsyncThunk(
     "users/add-premium",
     async (data, { rejectWithValue }) => {
-        console.log("user data", data)
         try {
-            console.log(data)
             const response = await fetch(`${baseURL}users/${data.userId}/add-premium-datasets`, {
                 method: "PUT",
                 headers: {
@@ -75,10 +70,62 @@ export const addPremiumDatasets = createAsyncThunk(
             });
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("res", responseData)
                 return responseData;
             } else {
                 toast.error("Error while updating the user")
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message);
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const updateCombinePermission = createAsyncThunk(
+    "users/updateCombinePermission",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${baseURL}users/${data.userId}/allow-combine-datasets`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data.body)
+
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                toast.success("Permission updated successfully")
+                return responseData;
+            } else {
+                toast.error("Error while updating permission")
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message);
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+export const updateExportDataPermission = createAsyncThunk(
+    "users/allowExportData",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${baseURL}users/${data.userId}/allow-export-data`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data.body)
+
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                toast.success("Permission updated successfully")
+                return responseData;
+            } else {
+                toast.error("Error while updating permission")
                 const errorData = await response.json();
                 return rejectWithValue(errorData.message);
             }

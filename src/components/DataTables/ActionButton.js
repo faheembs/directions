@@ -50,10 +50,10 @@ const ActionButton = ({ datasetId, role }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       {role == "admin" && (<IconButton
         onClick={handleEditClick}
-        sx={{ mr: 2 }}
+        sx={{ mr: 2, ml: '-11px' }}
       >
         <EditIcon sx={{ color: 'black' }} />
       </IconButton>)}

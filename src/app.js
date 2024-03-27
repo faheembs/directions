@@ -20,21 +20,11 @@ import {
 } from './actions';
 import { loadCloudMap, addDataToMap, addNotification, replaceDataInMap } from '@kepler.gl/actions';
 import { CLOUD_PROVIDERS } from './cloud-providers';
-import sampleTripData, { testCsvData, sampleTripDataConfig } from './data/sample-trip-data';
-import sampleGeojson from './data/sample-small-geojson';
-import sampleGeojsonPoints from './data/sample-geojson-points';
-import sampleGeojsonConfig from './data/sample-geojson-config';
-import sampleH3Data, { config as h3MapConfig } from './data/sample-hex-id-csv';
-import sampleS2Data, { config as s2MapConfig, dataId as s2DataId } from './data/sample-s2-data';
-import sampleAnimateTrip, { animateTripDataId } from './data/sample-animate-trip-data';
-import sampleIconCsv, { config as savedMapConfig } from './data/sample-icon-csv';
-// import directionSample, { config as directionConfig } from './data/directionSample';
-import sampleGpsData from './data/sample-gps-data';
-import { processCsvData, processGeojson } from '@kepler.gl/processors';
 import { PanelHeaderFactory, injectComponents } from '@kepler.gl/components';
 import logo from './assets/Slide1.png'
 import { Box, Button } from '@mui/material';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { browserHistory } from 'react-router';
 import { getAllUsers } from './features/Users/usersAction';
 import { socketBaseURL } from './constants/baseURL';
 /* eslint-enable no-unused-vars */
@@ -130,22 +120,22 @@ const App = (props) => {
   );
 
   useEffect(() => {
-    // const token = localStorage.getItem('userToken')
-    // if (!token) {
-    //   navigate("/login")
-    //   window.reload()
+    const token = localStorage.getItem('userToken')
+    if (!token) {
+      browserHistory.push("/login")
+      // window.reload()
 
-    // }
+    }
     const user = localStorage.getItem('usersInfo')
 
+
+
     const users = JSON.parse(user)
-    console.log('user id from local', users._id)
     const socket = io(socketBaseURL);
 
     socket.on('userOnlineStatus', (userId, online) => {
       setOnlineStatus(online);
       if (users.role === "admin") { dispatch(getAllUsers({})) }
-      console.log("online status changed")
 
     })
     socket.emit("login", users._id);
@@ -162,6 +152,7 @@ const App = (props) => {
     return () => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('beforeunload', handleDisconnect);
+        // localStorage.clear()
       }
     };
 

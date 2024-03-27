@@ -104,70 +104,75 @@ const UserActions = ({ selectedUserId, premiumDatasets }) => {
                             <CloseIcon />
                         </IconButton>
                     </Box>
-                    <Box>
-                        <TextField
-                            variant="outlined"
-                            placeholder='Search'
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            sx={{
-                                my: 2, width: '100%',
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: '10px',
-                                    "& .MuiOutlinedInput-input": {
-                                        fontSize: "16px",
-                                        height: "15px",
-                                        borderColor: "#ececec",
+
+                    {filteredDatasets?.length < 1 ?
+                        <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>No Datasets are available to combine!</Typography>
+                        :
+                        <Box>
+                            <TextField
+                                variant="outlined"
+                                placeholder='Search'
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                sx={{
+                                    my: 2, width: '100%',
+                                    "& .MuiOutlinedInput-root": {
+                                        borderRadius: '10px',
+                                        "& .MuiOutlinedInput-input": {
+                                            fontSize: "16px",
+                                            height: "15px",
+                                            borderColor: "#ececec",
+                                        },
                                     },
-                                },
-                            }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <IconButton>
-                                            <SearchIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        {noResults ? (
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <IconButton>
+                                                <SearchIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            {noResults ? (
 
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '250px' }}>
-                                <SearchOffIcon sx={{ fontSize: '58px' }} />
-                                <Typography variant="body1" align="center">No results found for "{searchTerm}"</Typography>
-                            </Box>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '250px' }}>
+                                    <SearchOffIcon sx={{ fontSize: '58px' }} />
+                                    <Typography variant="body1" align="center">No results found for "{searchTerm}"</Typography>
+                                </Box>
 
-                        ) : (
-                            <List sx={{ border: '1px solid #ccc', borderRadius: 4 }}>
-                                {filteredDatasets.map(dataset => (
-                                    <ListItem key={dataset._id}>
-                                        <ListItemText primary={dataset.label} />
-                                        <ListItemSecondaryAction>
-                                            <Checkbox
-                                                checked={selectedDatasetIds.includes(dataset._id)}
-                                                onChange={(event) => handleCheckboxChange(dataset._id, event.target.checked)}
-                                            />
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        )}
-                        {noResults ? null : <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                            <Button variant="outlined" sx={{
-                                borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
-                                    color: 'black',
-                                    backgroundColor: 'white',
-                                    borderColor: 'black'
-                                },
-                                my: 2, px: 2
-                            }}
-                                onClick={handleAddingDatasets}
-                            >
-                                Save
-                            </Button>
-                        </Box>}
-                    </Box>
+                            ) : (
+                                <List sx={{ border: '1px solid #ccc', borderRadius: 4 }}>
+                                    {filteredDatasets.map(dataset => (
+                                        <ListItem key={dataset._id}>
+                                            <ListItemText primary={dataset.label} />
+                                            <ListItemSecondaryAction>
+                                                <Checkbox
+                                                    checked={selectedDatasetIds.includes(dataset._id)}
+                                                    onChange={(event) => handleCheckboxChange(dataset._id, event.target.checked)}
+                                                />
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+                            {noResults ? null : <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                <Button variant="outlined" sx={{
+                                    borderColor: 'black', backgroundColor: 'black', color: 'white', "&:hover": {
+                                        color: 'black',
+                                        backgroundColor: 'white',
+                                        borderColor: 'black'
+                                    },
+                                    my: 2, px: 2
+                                }}
+                                    onClick={handleAddingDatasets}
+                                >
+                                    Save
+                                </Button>
+                            </Box>}
+                        </Box>
+                    }
                 </Box>
             </CustomModal>
         </Box>

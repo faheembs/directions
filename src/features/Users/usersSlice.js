@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addPremiumDatasets, getAllUsers } from "./usersAction";
+import { addPremiumDatasets, getAllUsers, updateCombinePermission } from "./usersAction";
 
 const UsersSlice = createSlice({
     name: "users",
@@ -41,6 +41,21 @@ const UsersSlice = createSlice({
                 state.isLoading = false;
                 state.success = false;
                 state.error = "Failed to add dataset.";
+            })
+            .addCase(updateCombinePermission.pending, (state) => {
+                state.isLoading = true;
+                state.success = false;
+                state.error = null;
+            })
+            .addCase(updateCombinePermission.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.success = true;
+                state.combinePermission = action.payload.data;
+            })
+            .addCase(updateCombinePermission.rejected, (state, action) => {
+                state.isLoading = false;
+                state.success = false;
+                state.error = "Failed to update permission.";
             });
     },
 });

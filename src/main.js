@@ -12,7 +12,7 @@ import App from './app';
 import { buildAppRoutes } from './utils/routes';
 import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Dashboard/profile/Profile';
 import DataTable from './components/DataTables/DataTable';
@@ -22,30 +22,6 @@ import theme from './styles/theme';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from "./utils/ProtectedRoute";
 
-
-// const ProtectedRoute = ({ component: Component, ...rest }) => (
-//   <Route
-//     {...rest}
-//     render={(props) => {
-//       console.log('Checking token:', localStorage.getItem('userToken'));
-//       if (localStorage.getItem('userToken')) {
-//         console.log('Token present. Rendering component.');
-//         return <Component {...props} />;
-//       } else {
-//         console.log('Token not present. Redirecting to login.');
-//         return <Redirect to="/login" />;
-//       }
-//     }}
-//   />
-// );
-// const userToken = localStorage.getItem('userToken');
-// console.log(userToken)
-// if (!userToken) {
-//   console.log("no")
-//   browserHistory.push("/login")
-//   // navigate("/login")
-//   // window.reload()
-// }
 
 const history = syncHistoryWithStore(browserHistory, store);
 

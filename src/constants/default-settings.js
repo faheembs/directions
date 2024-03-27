@@ -13,7 +13,6 @@ export async function fetchData() {
     const response = await fetch(`${baseURL}dataset/getAll`);
     if (response.ok) {
       const responseData = await response.json();
-      console.log("res", responseData);
 
       // Assuming response.data contains the map URL
       const mapUrl = responseData?.data;
@@ -47,7 +46,6 @@ let MAP_CONFIG_URL = ''; // Initialize MAP_CONFIG_URL
 fetchData()
   .then(mapUrl => {
     MAP_CONFIG_URL = mapUrl;
-    console.log("map config url------>", MAP_CONFIG_URL) // Update MAP_CONFIG_URL with the fetched mapUrl
   })
   .catch(error => {
     console.error('Error fetching data:', error);
@@ -65,7 +63,9 @@ export const KEPLER_GL_WEBSITE = 'http://kepler.gl/';
 export const QUERY_TYPES = keyMirror({
   file: null,
   sample: null,
-  directions: null
+  directions: null,
+  disabled: null
+
 });
 
 export const QUERY_OPTIONS = keyMirror({
@@ -76,7 +76,8 @@ export const QUERY_OPTIONS = keyMirror({
 export const LOADING_METHODS = keyMirror({
   remote: null,
   sample: null,
-  directions: null
+  directions: null,
+  disabled: null
 });
 
 export const LOADING_SAMPLE_LIST_ERROR_MESSAGE = 'Not able to load sample gallery';

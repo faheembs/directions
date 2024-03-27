@@ -18,6 +18,7 @@ const en = {
     '<a rel="noopener noreferrer" target="_blank" href="{corsLink}">click here</a>',
   'loadRemoteMap.fetch': 'Fetch',
   'modal.loadData.directions': 'Try Directions\' Sample Data',
+  'modal.loadData.disabled': 'Load Files'
 };
 
 export const messages = {
